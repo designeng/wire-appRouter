@@ -51,7 +51,7 @@ define [
                     )
 
 
-        startChildRouteWiring = (route, wire) ->
+        startChildRouteWiring = (prospectCTX, route, wire) ->
             # filterStrategy must response with only one child spec we are going to load as childSpec
             # getCurrentRoute() call returns something like beginning from slash ("/.../.../..."), so must be sliced
             childRouteObject = filterStrategy(childRoutes, route, getCurrentRoute().slice(1))
@@ -64,10 +64,10 @@ define [
                 route       : childRouteObject.route
                 options     : childRouteObject.options
                                 
-            wireChildRoute(properties, wire)
+            wireChildRoute(prospectCTX, properties, wire)
 
         # params: childRouteObject properties
-        wireChildRoute = (properties, wire) ->
+        wireChildRoute = (prospectCTX, properties, wire) ->
 
             wire.loadModule(properties.spec).then (childSpecObj) ->
 
@@ -85,12 +85,14 @@ define [
                     if properties.behavior
                         sequenceBehavior(childCTX, properties.route, wire)
 
+
+                    # ---- TODO: remove? -----
                     # subSpecs as {Array}
                     if properties.subSpecs
                         for subSpec in properties.subSpecs
                             # recursive call
                             subSpec.route = properties.route
-                            wireChildRoute(subSpec, wire)
+                            wireChildRoute(prospectCTX, subSpec, wire)
 
         routeBinding = (tempRouter, compDef, wire) ->
             for route, routeObject of compDef.options.routes
@@ -112,22 +114,23 @@ define [
                                 injectBechavior(specObj, behavior)
 
                             # spec from "routes" options section is wired
-                            wire.createChild(specObj).then (ctx) ->
+                            wire.createChild(specObj).then (prospectCTX) ->
 
                                 if behavior
-                                    sequenceBehavior(ctx, route, wire)
+                                    sequenceBehavior(prospectCTX, route, wire)
                                 
                                 # renderingController.isReady state means that prospect template is rendered
-                                When(ctx.renderingController.isReady()).then () ->
+                                When(prospectCTX.renderingController.isReady()).then () ->
                                     # set current
-                                    currentContext = ctx
+                                    currentContext = prospectCTX
                                     currentProspectSpec = spec
 
-                                    startChildRouteWiring(route, wire)
+                                    startChildRouteWiring(prospectCTX, route, wire)
                             , errorHandler
                     else
                         # spec module is loaded, child route wiring must be started
-                        startChildRouteWiring(route, wire)
+                        startChildRouteWiring(currentContext, route, wire)
+                        
                 ).bind null, spec, slot, route, behavior, wire
 
                 oneRoute = tempRouter.addRoute(route)

@@ -35,7 +35,7 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
         return sequence(tasks, childCTX, route);
       }, function() {});
     };
-    startChildRouteWiring = function(route, wire) {
+    startChildRouteWiring = function(prospectCTX, route, wire) {
       var childRouteObject, properties;
       childRouteObject = filterStrategy(childRoutes, route, getCurrentRoute().slice(1));
       properties = {
@@ -46,9 +46,9 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
         route: childRouteObject.route,
         options: childRouteObject.options
       };
-      return wireChildRoute(properties, wire);
+      return wireChildRoute(prospectCTX, properties, wire);
     };
-    wireChildRoute = function(properties, wire) {
+    wireChildRoute = function(prospectCTX, properties, wire) {
       return wire.loadModule(properties.spec).then(function(childSpecObj) {
         childSpecObj.slot = properties.slot;
         if (properties.behavior) {
@@ -68,7 +68,7 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               subSpec = _ref[_i];
               subSpec.route = properties.route;
-              _results.push(wireChildRoute(subSpec, wire));
+              _results.push(wireChildRoute(prospectCTX, subSpec, wire));
             }
             return _results;
           }
@@ -95,19 +95,19 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
               if (behavior) {
                 injectBechavior(specObj, behavior);
               }
-              return wire.createChild(specObj).then(function(ctx) {
+              return wire.createChild(specObj).then(function(prospectCTX) {
                 if (behavior) {
-                  sequenceBehavior(ctx, route, wire);
+                  sequenceBehavior(prospectCTX, route, wire);
                 }
-                return When(ctx.renderingController.isReady()).then(function() {
-                  currentContext = ctx;
+                return When(prospectCTX.renderingController.isReady()).then(function() {
+                  currentContext = prospectCTX;
                   currentProspectSpec = spec;
-                  return startChildRouteWiring(route, wire);
+                  return startChildRouteWiring(prospectCTX, route, wire);
                 });
               }, errorHandler);
             });
           } else {
-            return startChildRouteWiring(route, wire);
+            return startChildRouteWiring(currentContext, route, wire);
           }
         }).bind(null, spec, slot, route, behavior, wire);
         oneRoute = tempRouter.addRoute(route);
