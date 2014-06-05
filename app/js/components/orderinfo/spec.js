@@ -5,6 +5,9 @@ define(function() {
       render: {
         template: {
           module: "text!components/orderinfo/template.html"
+        },
+        css: {
+          module: "css!components/orderinfo/style.css"
         }
       },
       insert: {

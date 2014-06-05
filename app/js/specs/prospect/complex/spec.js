@@ -5,6 +5,9 @@ define(function() {
       render: {
         template: {
           module: "text!specs/prospect/complex/template/complex.html"
+        },
+        css: {
+          module: "css!specs/prospect/complex/template/style.css"
         }
       },
       insert: {

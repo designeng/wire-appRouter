@@ -21,10 +21,14 @@ define ->
             slot: {$ref: "dom.first!#page"}
 
         # complex template
-        "order/info"  : 
+        "order/right"  : 
+            spec: "components/orderinfo/spec"
+            slot: {$ref: "dom.first!#pageRight"}
+            # behavior: {$ref: "behavior!shiftCenter"}
+
+        "order/center"  : 
             spec: "components/orderinfo/spec"
             slot: {$ref: "dom.first!#pageCenter"}
-            behavior: {$ref: "behavior!shiftCenter"}
 
 
 

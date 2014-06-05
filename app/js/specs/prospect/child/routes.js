@@ -31,13 +31,16 @@ define(function() {
         $ref: "dom.first!#page"
       }
     },
-    "order/info": {
+    "order/right": {
+      spec: "components/orderinfo/spec",
+      slot: {
+        $ref: "dom.first!#pageRight"
+      }
+    },
+    "order/center": {
       spec: "components/orderinfo/spec",
       slot: {
         $ref: "dom.first!#pageCenter"
-      },
-      behavior: {
-        $ref: "behavior!shiftCenter"
       }
     }
   };

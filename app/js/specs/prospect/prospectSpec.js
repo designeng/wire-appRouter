@@ -29,7 +29,7 @@ define(function() {
             },
             rules: {
               complexpart: /\border\b/i,
-              infopart: /\binfo\b/i
+              infopart: /\bright\b|\bcenter\b/i
             }
           },
           "{complexpart}/{infopart}/{id}/{side}": {
