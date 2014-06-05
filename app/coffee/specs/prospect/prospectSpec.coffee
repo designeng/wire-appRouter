@@ -28,14 +28,14 @@ define ->
                         infopart: /\binfo\b/i
 
 
-                # "{complexpart}/{infopart}/{id}/{side}"  :
-                #     spec: "specs/prospect/complex/spec"
-                #     slot: {$ref: "dom.first!#prospect"}
-                #     rules:
-                #         complexpart: /\border\b/i
-                #         infopart:/\binfo\b/i
-                #         id: /[0-9]+/i
-                #         side: /\baviacost\b|\badditional\b|\bflight\b/i
+                "{complexpart}/{infopart}/{id}/{side}"  :
+                    spec: "specs/prospect/complex/spec"
+                    slot: {$ref: "dom.first!#prospect"}
+                    rules:
+                        complexpart: /\border\b/i
+                        infopart:/\binfo\b/i
+                        id: /[0-9]+/i
+                        side: /\bflight\b/i
 
 
                 # "{complexpart}/{infopart}/{id}/{person}/{personId}"  :

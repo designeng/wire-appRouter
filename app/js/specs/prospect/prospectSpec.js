@@ -31,6 +31,18 @@ define(function() {
               complexpart: /\border\b/i,
               infopart: /\binfo\b/i
             }
+          },
+          "{complexpart}/{infopart}/{id}/{side}": {
+            spec: "specs/prospect/complex/spec",
+            slot: {
+              $ref: "dom.first!#prospect"
+            },
+            rules: {
+              complexpart: /\border\b/i,
+              infopart: /\binfo\b/i,
+              id: /[0-9]+/i,
+              side: /\bflight\b/i
+            }
           }
         },
         routeFilterStrategy: {
