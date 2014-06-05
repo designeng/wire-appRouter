@@ -20,13 +20,12 @@ define ->
                         plain: /^autocomplete|^calendar/i
                     behavior: {$ref: "behavior!doSmth   "}
 
-                # "{complexpart}/{infopart}/{id}"  :
-                #     spec: "specs/prospect/complex/spec"
-                #     slot: {$ref: "dom.first!#prospect"}
-                #     rules:
-                #         complexpart: /\border\b/i
-                #         infopart: /\binfo\b/i
-                #         id: /[0-9]+/i
+                "{complexpart}/{infopart}"  :
+                    spec: "specs/prospect/complex/spec"
+                    slot: {$ref: "dom.first!#prospect"}
+                    rules:
+                        complexpart: /\border\b/i
+                        infopart: /\binfo\b/i
 
 
                 # "{complexpart}/{infopart}/{id}/{side}"  :

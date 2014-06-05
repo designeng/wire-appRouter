@@ -1,10 +1,10 @@
 define(function() {
   return {
     $plugins: ['wire/debug', 'wire/on', 'wire/dom', 'wire/dom/render'],
-    calendarView: {
+    orderinfoView: {
       render: {
         template: {
-          module: "text!components/calendar/template.html"
+          module: "text!components/orderinfo/template.html"
         }
       },
       insert: {

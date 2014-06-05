@@ -31,7 +31,7 @@ define(function() {
         $ref: "dom.first!#page"
       }
     },
-    "order/info/{cpid}": {
+    "order/info": {
       spec: "components/orderinfo/spec",
       slot: {
         $ref: "dom.first!#pageCenter"

@@ -21,6 +21,16 @@ define(function() {
             behavior: {
               $ref: "behavior!doSmth   "
             }
+          },
+          "{complexpart}/{infopart}": {
+            spec: "specs/prospect/complex/spec",
+            slot: {
+              $ref: "dom.first!#prospect"
+            },
+            rules: {
+              complexpart: /\border\b/i,
+              infopart: /\binfo\b/i
+            }
           }
         },
         routeFilterStrategy: {

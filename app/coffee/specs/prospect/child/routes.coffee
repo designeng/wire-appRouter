@@ -20,8 +20,8 @@ define ->
             spec: "components/searchorderform/spec"
             slot: {$ref: "dom.first!#page"}
 
-        # order/info group - must be rendered in complex template
-        "order/info/{cpid}"  : 
+        # complex template
+        "order/info"  : 
             spec: "components/orderinfo/spec"
             slot: {$ref: "dom.first!#pageCenter"}
             behavior: {$ref: "behavior!shiftCenter"}
