@@ -80,10 +80,14 @@ define [
                 if properties.options
                     childSpecObj.options = properties.options
 
-                wire.createChild(childSpecObj).then (childCTX) ->
+                prospectCTX.wire(childSpecObj).then (childCTX) ->
 
                     if properties.behavior
                         sequenceBehavior(childCTX, properties.route, wire)
+
+                    console.log "childCTX>>>>----", childCTX
+                    When(childCTX.controller.isReady()).then (controller) ->
+                        controller.registerTemplateContent(controller.specMainView)
 
 
                     # ---- TODO: remove? -----
@@ -130,7 +134,7 @@ define [
                     else
                         # spec module is loaded, child route wiring must be started
                         startChildRouteWiring(currentContext, route, wire)
-                        
+
                 ).bind null, spec, slot, route, behavior, wire
 
                 oneRoute = tempRouter.addRoute(route)

@@ -57,11 +57,15 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
         if (properties.options) {
           childSpecObj.options = properties.options;
         }
-        return wire.createChild(childSpecObj).then(function(childCTX) {
+        return prospectCTX.wire(childSpecObj).then(function(childCTX) {
           var subSpec, _i, _len, _ref, _results;
           if (properties.behavior) {
             sequenceBehavior(childCTX, properties.route, wire);
           }
+          console.log("childCTX>>>>----", childCTX);
+          When(childCTX.controller.isReady()).then(function(controller) {
+            return controller.registerTemplateContent(controller.specMainView);
+          });
           if (properties.subSpecs) {
             _ref = properties.subSpecs;
             _results = [];

@@ -1,7 +1,7 @@
 define(function() {
   return {
-    $plugins: ['wire/debug', 'wire/on', 'wire/dom', 'wire/dom/render'],
-    orderinfoView: {
+    $plugins: ['wire/debug', 'wire/on', 'wire/aop', 'wire/dom', 'wire/dom/render', 'cola', "core/plugin/afterBind"],
+    specMainView: {
       render: {
         template: {
           module: "text!components/orderinfo/template.html"
@@ -14,7 +14,46 @@ define(function() {
         at: {
           $ref: 'slot'
         }
+      },
+      bind: {
+        to: {
+          $ref: 'listCollection'
+        },
+        bindings: {
+          port: '.port'
+        }
+      },
+      afterBind: function() {
+        return console.log("afterBind");
       }
+    },
+    controller: {
+      create: "components/orderinfo/controller",
+      properties: {
+        view: {
+          $ref: 'specMainView'
+        },
+        listCollection: {
+          $ref: 'listCollection'
+        },
+        slot: {
+          $ref: 'slot'
+        }
+      },
+      ready: {
+        "onReady": {}
+      }
+    },
+    listCollection: {
+      create: "cola/Collection",
+      ready: {
+        "addSource": {
+          $ref: 'source'
+        }
+      }
+    },
+    source: {
+      create: "components/orderinfo/source"
     }
   };
 });

@@ -21,3 +21,6 @@ define ->
             view: {$ref: "prospectView"}
         ready:
             "onReady": {}
+
+    registerTemplateContent: (view) ->
+        @renderingController.registerTemplateContent(view)

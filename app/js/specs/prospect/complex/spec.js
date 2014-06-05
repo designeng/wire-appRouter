@@ -26,6 +26,9 @@ define(function() {
       ready: {
         "onReady": {}
       }
+    },
+    registerTemplateContent: function(view) {
+      return this.renderingController.registerTemplateContent(view);
     }
   };
 });

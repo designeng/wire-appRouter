@@ -6,7 +6,14 @@ define(["when", "jquery"], function(When, $) {
     RenderingController.prototype.renderingDeferred = When.defer();
 
     RenderingController.prototype.onReady = function() {
-      return this.renderingDeferred.resolve(this);
+      var _this = this;
+      this.renderingDeferred.resolve(this);
+      return setTimeout(function() {
+        return _this.listCollection.add({
+          id: 10,
+          port: "Lissabon"
+        });
+      }, 1000);
     };
 
     RenderingController.prototype.isReady = function() {
@@ -14,7 +21,7 @@ define(["when", "jquery"], function(When, $) {
     };
 
     RenderingController.prototype.registerTemplateContent = function(view) {
-      return console.log("registerTemplateContent------", $(view).html());
+      return console.log("registerTemplateContent------", $(this.slot).html());
     };
 
     return RenderingController;

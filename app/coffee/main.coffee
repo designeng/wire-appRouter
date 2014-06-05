@@ -10,6 +10,5 @@ require [
     bootstrapCTX.wire(
         prospectSpec
     ).then (resultCTX) ->
-
         hasher.prependHash = ""
         hasher.init()
