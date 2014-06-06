@@ -1,4 +1,4 @@
-define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "hasher", 'when', 'wire/lib/object', 'when/sequence'], function(_, getCurrentRoute, crossroads, hasher, When, object, sequence) {
+define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "hasher", 'when', 'wire/lib/object', 'when/sequence', 'specs/reporter/spec'], function(_, getCurrentRoute, crossroads, hasher, When, object, sequence, reporterSpecObj) {
   return function(options) {
     var childRoutes, createRouter, currentContext, currentProspectSpec, errorHandler, filterStrategy, initializeRouter, injectBechavior, isRef, parseHash, pluginInstance, routeBinding, sequenceBehavior, startChildRouteWiring, tempRouter, wireChildRoute;
     currentContext = null;
@@ -62,9 +62,8 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
           if (properties.behavior) {
             sequenceBehavior(childCTX, properties.route, wire);
           }
-          console.log("childCTX>>>>----", childCTX);
-          When(childCTX.controller.isReady()).then(function(controller) {
-            return controller.registerTemplateContent(controller.specMainView);
+          childCTX.wire(reporterSpecObj).then(function(reporterCTX) {
+            return console.log("reporterCTX>>>>", reporterCTX);
           });
           if (properties.subSpecs) {
             _ref = properties.subSpecs;

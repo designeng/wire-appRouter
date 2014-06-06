@@ -13,10 +13,6 @@ define(["when", "jquery"], function(When, $) {
       return this.renderingDeferred.promise;
     };
 
-    RenderingController.prototype.registerTemplateContent = function(view) {
-      return console.log("registerTemplateContent------", $(view).html());
-    };
-
     return RenderingController;
 
   })();

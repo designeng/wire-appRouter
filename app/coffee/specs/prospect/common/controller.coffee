@@ -2,6 +2,7 @@ define [
 	"when"
 	"jquery"
 ], (When, $) ->
+
     class RenderingController
 
         renderingDeferred: When.defer()
@@ -11,6 +12,3 @@ define [
 
         isReady: ->
             return @renderingDeferred.promise
-
-        registerTemplateContent: (view) ->
-        	console.log "registerTemplateContent------", $(view).html()

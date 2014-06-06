@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ['wire/debug', 'wire/on', 'wire/aop', 'wire/dom', 'wire/dom/render', 'cola', "core/plugin/afterBind"],
+    $plugins: ['wire/debug', 'wire/on', 'wire/aop', 'wire/dom', 'wire/dom/render', 'cola'],
     specMainView: {
       render: {
         template: {
@@ -22,9 +22,6 @@ define(function() {
         bindings: {
           port: '.port'
         }
-      },
-      afterBind: function() {
-        return console.log("afterBind");
       }
     },
     controller: {

@@ -8,7 +8,8 @@ define [
     'when'
     'wire/lib/object'
     'when/sequence'
-], (_, getCurrentRoute, crossroads, hasher, When, object, sequence) ->
+    'specs/reporter/spec'
+], (_, getCurrentRoute, crossroads, hasher, When, object, sequence, reporterSpecObj) ->
 
     return (options) ->
 
@@ -85,9 +86,9 @@ define [
                     if properties.behavior
                         sequenceBehavior(childCTX, properties.route, wire)
 
-                    console.log "childCTX>>>>----", childCTX
-                    When(childCTX.controller.isReady()).then (controller) ->
-                        controller.registerTemplateContent(controller.specMainView)
+                    childCTX.wire(reporterSpecObj).then (reporterCTX) ->
+                        console.log "reporterCTX>>>>", reporterCTX
+
 
 
                     # ---- TODO: remove? -----

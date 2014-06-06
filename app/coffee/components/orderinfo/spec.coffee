@@ -7,7 +7,6 @@ define ->
         'wire/dom'
         'wire/dom/render'
         'cola'
-        "core/plugin/afterBind"
     ]
 
     specMainView:
@@ -24,9 +23,6 @@ define ->
                 $ref: 'listCollection'
             bindings:
                 port: '.port'
-
-        afterBind: () ->
-            console.log "afterBind"
 
     controller:
         create: "components/orderinfo/controller"

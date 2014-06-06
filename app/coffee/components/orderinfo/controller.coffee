@@ -20,6 +20,3 @@ define [
 
         isReady: ->
             return @renderingDeferred.promise
-
-        registerTemplateContent: (view) ->
-        	console.log "registerTemplateContent------", $(@slot).html()

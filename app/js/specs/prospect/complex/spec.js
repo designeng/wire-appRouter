@@ -27,8 +27,8 @@ define(function() {
         "onReady": {}
       }
     },
-    registerTemplateContent: function(view) {
-      return this.renderingController.registerTemplateContent(view);
+    registerTemplateContent: {
+      module: "specs/util/registerTemplateContent"
     }
   };
 });

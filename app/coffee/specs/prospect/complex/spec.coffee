@@ -22,5 +22,5 @@ define ->
         ready:
             "onReady": {}
 
-    registerTemplateContent: (view) ->
-        @renderingController.registerTemplateContent(view)
+    registerTemplateContent:
+        module: "specs/util/registerTemplateContent"
