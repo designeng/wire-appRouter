@@ -25,26 +25,12 @@ define ->
         ready:
             "onReady": {}
 
-    identifyBySlot:
-        create:
-            module: 'cola/identifier/property'
-            args: [ 'slot' ]
-
-    prospectViewTemplatesCollection:
-        create:
-            module: 'cola/Collection'
-            # args: {identifier: { $ref: 'identifyBySlot' }}
-
-    prospectViewTemplatesStore:
-        create:
-            module: "cola/adapter/LocalStorage"
-            args: "prospectViewTemplates"
-        bind: {$ref: 'prospectViewTemplatesCollection'}
-
     templateController:
         create: "specs/prospect/complex/templateController"
         properties:
-            prospectViewTemplatesCollection: {$ref: 'prospectViewTemplatesCollection'}
+            slotIds: ["pageLeft", "pageCenter", "pageRight"]
+            prospectView: {$ref: 'prospectView'}
+            slot: {$ref: 'slot'}
         ready:
             "onReady": {}
         
