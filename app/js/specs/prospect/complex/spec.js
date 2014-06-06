@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ['wire/dom', 'wire/dom/render'],
+    $plugins: ['wire/dom', 'wire/on', 'wire/dom/render', 'cola'],
     prospectView: {
       render: {
         template: {
@@ -27,8 +27,25 @@ define(function() {
         "onReady": {}
       }
     },
+    prospectViewTemplatesCollection: {
+      create: "cola/Collection"
+    },
+    prospectViewTemplatesStore: {
+      create: {
+        module: "cola/adapter/LocalStorage",
+        args: "prospectViewTemplates"
+      },
+      bind: {
+        $ref: 'prospectViewTemplatesCollection'
+      }
+    },
     registerTemplateContent: {
-      module: "specs/util/registerTemplateContent"
+      module: "specs/util/registerTemplateContent",
+      properties: {
+        prospectViewTemplatesCollection: {
+          $ref: 'prospectViewTemplatesCollection'
+        }
+      }
     }
   };
 });

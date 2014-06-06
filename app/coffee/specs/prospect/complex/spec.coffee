@@ -2,7 +2,9 @@ define ->
 
     $plugins: [
         'wire/dom'
+        'wire/on'
         'wire/dom/render'
+        'cola'
     ]
 
     prospectView:
@@ -22,5 +24,17 @@ define ->
         ready:
             "onReady": {}
 
+    prospectViewTemplatesCollection:
+        create: "cola/Collection"
+
+    prospectViewTemplatesStore:
+        create:
+            module: "cola/adapter/LocalStorage"
+            args: "prospectViewTemplates"
+        bind: {$ref: 'prospectViewTemplatesCollection'}
+
+
     registerTemplateContent:
         module: "specs/util/registerTemplateContent"
+        properties:
+            prospectViewTemplatesCollection: {$ref: 'prospectViewTemplatesCollection'}
