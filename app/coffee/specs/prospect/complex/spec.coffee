@@ -1,6 +1,7 @@
 define ->
 
     $plugins: [
+        'wire/debug'
         'wire/dom'
         'wire/on'
         'wire/dom/render'
@@ -24,8 +25,15 @@ define ->
         ready:
             "onReady": {}
 
+    identifyBySlot:
+        create:
+            module: 'cola/identifier/property'
+            args: [ 'slot' ]
+
     prospectViewTemplatesCollection:
-        create: "cola/Collection"
+        create:
+            module: 'cola/Collection'
+            # args: {identifier: { $ref: 'identifyBySlot' }}
 
     prospectViewTemplatesStore:
         create:
@@ -33,8 +41,10 @@ define ->
             args: "prospectViewTemplates"
         bind: {$ref: 'prospectViewTemplatesCollection'}
 
-
-    registerTemplateContent:
-        module: "specs/util/registerTemplateContent"
+    templateController:
+        create: "specs/prospect/complex/templateController"
         properties:
             prospectViewTemplatesCollection: {$ref: 'prospectViewTemplatesCollection'}
+        ready:
+            "onReady": {}
+        

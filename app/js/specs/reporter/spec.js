@@ -7,8 +7,11 @@ define(function() {
         specMainView: {
           $ref: 'specMainView'
         },
-        registerTemplateContent: {
-          $ref: 'registerTemplateContent'
+        slot: {
+          $ref: 'slot'
+        },
+        templateController: {
+          $ref: 'templateController'
         }
       },
       ready: {

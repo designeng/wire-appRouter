@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ['wire/dom', 'wire/on', 'wire/dom/render', 'cola'],
+    $plugins: ['wire/debug', 'wire/dom', 'wire/on', 'wire/dom/render', 'cola'],
     prospectView: {
       render: {
         template: {
@@ -27,8 +27,16 @@ define(function() {
         "onReady": {}
       }
     },
+    identifyBySlot: {
+      create: {
+        module: 'cola/identifier/property',
+        args: ['slot']
+      }
+    },
     prospectViewTemplatesCollection: {
-      create: "cola/Collection"
+      create: {
+        module: 'cola/Collection'
+      }
     },
     prospectViewTemplatesStore: {
       create: {
@@ -39,12 +47,15 @@ define(function() {
         $ref: 'prospectViewTemplatesCollection'
       }
     },
-    registerTemplateContent: {
-      module: "specs/util/registerTemplateContent",
+    templateController: {
+      create: "specs/prospect/complex/templateController",
       properties: {
         prospectViewTemplatesCollection: {
           $ref: 'prospectViewTemplatesCollection'
         }
+      },
+      ready: {
+        "onReady": {}
       }
     }
   };

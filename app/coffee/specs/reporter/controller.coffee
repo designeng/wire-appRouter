@@ -4,5 +4,7 @@ define [
 	class ReporterController
 
 		sendViewReport: ->
+			slot = @slot
+			console.log "CURRENT SLOT:::", slot
 			html = $(@specMainView).html()
-			@registerTemplateContent(html)
+			@templateController.registerTemplateContent(slot, html)

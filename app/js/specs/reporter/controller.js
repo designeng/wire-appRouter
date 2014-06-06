@@ -4,9 +4,11 @@ define(["jquery"], function($) {
     function ReporterController() {}
 
     ReporterController.prototype.sendViewReport = function() {
-      var html;
+      var html, slot;
+      slot = this.slot;
+      console.log("CURRENT SLOT:::", slot);
       html = $(this.specMainView).html();
-      return this.registerTemplateContent(html);
+      return this.templateController.registerTemplateContent(slot, html);
     };
 
     return ReporterController;

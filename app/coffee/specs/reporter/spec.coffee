@@ -5,10 +5,9 @@ define ->
 
     reporter:
         create: "specs/reporter/controller"
-
         properties:
-        	specMainView: {$ref: 'specMainView'}
-        	registerTemplateContent: {$ref: 'registerTemplateContent'}
-
+            specMainView: {$ref: 'specMainView'}
+            slot: {$ref: 'slot'}
+            templateController: {$ref: 'templateController'}
         ready:
-        	"sendViewReport": {}
+            "sendViewReport": {}
