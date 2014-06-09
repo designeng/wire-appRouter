@@ -38,15 +38,15 @@ define ->
                         side: /\bflight\b/i
 
 
-                # "{complexpart}/{infopart}/{id}/{person}/{personId}"  :
-                #     spec: "specs/prospect/complex/spec"
-                #     slot: {$ref: "dom.first!#prospect"}
-                #     rules:
-                #         complexpart: /\border\b/i
-                #         infopart: /\binfo\b/i
-                #         id: /[0-9]+/i
-                #         person: /\bperson\b/i
-                #         personId: /[0-9]+/i
+                "{complexpart}/{infopart}/{id}/{object}/{objectId}"  :
+                    spec: "specs/prospect/complex/spec"
+                    slot: {$ref: "dom.first!#prospect"}
+                    rules:
+                        complexpart: /\border\b/i
+                        infopart: /\binfo\b/i
+                        id: /[0-9]+/i
+                        object: /\bperson\b|\bflight\b/i
+                        objectId: /[0-9]+/i
 
             routeFilterStrategy: {$ref: "routeFilterStrategy"}
 

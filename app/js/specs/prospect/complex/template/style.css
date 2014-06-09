@@ -1,9 +1,11 @@
 ul.complex {
-    margin: 0; /* Обнуляем значение отступов */
-    padding: 4px; /* Значение полей */
+    margin: 5px; /* Обнуляем значение отступов */
+    padding: 5px; /* Значение полей */
    }
 ul.complex li {
-    display: inline; /* Отображать как строчный элемент */
+    display: block; /* Отображать как строчный элемент */
     margin-right: 5px; /* Отступ слева */
+    margin: 3px;
     border: 1px solid #000; /* Рамка вокруг текста */
-    padding: 3px; /* Поля вокруг текста */
+    padding: 5px; /* Поля вокруг текста */
+    width: 200px;

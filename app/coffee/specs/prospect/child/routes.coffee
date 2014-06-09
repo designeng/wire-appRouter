@@ -30,6 +30,15 @@ define ->
             spec: "components/orderinfo/spec"
             slot: {$ref: "dom.first!#pageCenter"}
 
+        # complex person route
+        "order/info/{id}/person/{personId}"  :
+            spec: "components/person/spec"
+            slot: {$ref: "dom.first!#pageRight"}
+
+        "order/info/{id}/flight"  :
+            spec: "components/flight/spec"
+            slot: {$ref: "dom.first!#pageLeft"}
+
 
 
 

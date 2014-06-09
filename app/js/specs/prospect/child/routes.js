@@ -42,6 +42,18 @@ define(function() {
       slot: {
         $ref: "dom.first!#pageCenter"
       }
+    },
+    "order/info/{id}/person/{personId}": {
+      spec: "components/person/spec",
+      slot: {
+        $ref: "dom.first!#pageRight"
+      }
+    },
+    "order/info/{id}/flight": {
+      spec: "components/flight/spec",
+      slot: {
+        $ref: "dom.first!#pageLeft"
+      }
     }
   };
   return childRoutes;
