@@ -4,14 +4,8 @@ define(function() {
     stubService: {
       path: "/service/stub"
     },
-    packResponseService: {
-      path: "/service/mock/pack/response"
-    },
-    flightStatesSearches: {
-      path: "/service/mock/flightstates/search"
-    },
-    pingService: {
-      path: "/service/ping"
+    autocompleteService: {
+      path: "service/autocomplete"
     }
   };
 });
