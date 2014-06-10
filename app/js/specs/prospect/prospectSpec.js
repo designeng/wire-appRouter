@@ -24,6 +24,7 @@ define(function() {
           },
           "{complexpart}/{infopart}": {
             spec: "specs/prospect/complex/spec",
+            mergeWith: "components/request/packresponse/spec",
             slot: {
               $ref: "dom.first!#prospect"
             },
@@ -34,6 +35,7 @@ define(function() {
           },
           "{complexpart}/{infopart}/{id}/{side}": {
             spec: "specs/prospect/complex/spec",
+            mergeWith: "components/request/packresponse/spec",
             slot: {
               $ref: "dom.first!#prospect"
             },
@@ -46,6 +48,7 @@ define(function() {
           },
           "{complexpart}/{infopart}/{id}/{object}/{objectId}": {
             spec: "specs/prospect/complex/spec",
+            mergeWith: "components/request/packresponse/spec",
             slot: {
               $ref: "dom.first!#prospect"
             },

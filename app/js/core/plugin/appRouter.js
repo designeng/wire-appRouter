@@ -79,40 +79,59 @@ define(["underscore", "core/util/navigation/getCurrentRoute", "crossroads", "has
       });
     };
     routeBinding = function(tempRouter, compDef, wire) {
-      var behavior, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref, _results;
+      var behavior, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref, _results;
       _ref = compDef.options.routes;
       _results = [];
       for (route in _ref) {
         routeObject = _ref[route];
         spec = routeObject.spec;
+        mergeWith = routeObject.mergeWith;
         slot = routeObject.slot;
         rules = routeObject.rules;
         behavior = routeObject.behavior;
-        routeFn = (function(spec, slot, route, behavior, wire) {
+        routeFn = (function(spec, mergeWith, slot, route, behavior, wire) {
           if (spec !== currentProspectSpec) {
-            return wire.loadModule(spec).then(function(specObj) {
+            return wire.loadModule(spec).then(function(prospectObj) {
               if (currentContext != null) {
                 currentContext.destroy();
               }
-              specObj.slot = slot;
+              prospectObj.slot = slot;
               if (behavior) {
-                injectBechavior(specObj, behavior);
+                injectBechavior(prospectObj, behavior);
               }
-              return wire.createChild(specObj).then(function(prospectCTX) {
-                if (behavior) {
-                  sequenceBehavior(prospectCTX, route, wire);
-                }
-                return When(prospectCTX.renderingController.isReady()).then(function() {
-                  currentContext = prospectCTX;
-                  currentProspectSpec = spec;
-                  return startChildRouteWiring(prospectCTX, route, wire);
+              console.log("prospectObj::::", prospectObj);
+              if (mergeWith) {
+                return wire.loadModule(mergeWith).then(function(mergeWithObj) {
+                  console.log("mergeWithObj:::", mergeWithObj);
+                  return wire([mergeWithObj, prospectObj]).then(function(prospectCTX) {
+                    console.log("prospectCTX::::", prospectCTX);
+                    if (behavior) {
+                      sequenceBehavior(prospectCTX, route, wire);
+                    }
+                    return When(prospectCTX.renderingController.isReady()).then(function() {
+                      currentContext = prospectCTX;
+                      currentProspectSpec = spec;
+                      return startChildRouteWiring(prospectCTX, route, wire);
+                    });
+                  }, errorHandler);
                 });
-              }, errorHandler);
+              } else {
+                return wire(prospectObj).then(function(prospectCTX) {
+                  if (behavior) {
+                    sequenceBehavior(prospectCTX, route, wire);
+                  }
+                  return When(prospectCTX.renderingController.isReady()).then(function() {
+                    currentContext = prospectCTX;
+                    currentProspectSpec = spec;
+                    return startChildRouteWiring(prospectCTX, route, wire);
+                  });
+                }, errorHandler);
+              }
             });
           } else {
             return startChildRouteWiring(currentContext, route, wire);
           }
-        }).bind(null, spec, slot, route, behavior, wire);
+        }).bind(null, spec, mergeWith, slot, route, behavior, wire);
         oneRoute = tempRouter.addRoute(route);
         oneRoute.rules = rules;
         oneRoute.matched.add(routeFn);

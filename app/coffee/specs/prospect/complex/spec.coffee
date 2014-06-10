@@ -1,8 +1,10 @@
 define ->
 
     $plugins: [
+        'wire/debug'
         'wire/dom'
         'wire/dom/render'
+        "core/plugin/serviceHub"
     ]
 
     prospectView:

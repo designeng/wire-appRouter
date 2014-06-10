@@ -102,41 +102,90 @@ define [
         routeBinding = (tempRouter, compDef, wire) ->
             for route, routeObject of compDef.options.routes
 
-                spec = routeObject.spec
-                slot = routeObject.slot
-                rules = routeObject.rules
-                behavior = routeObject.behavior
+                spec        = routeObject.spec
+                mergeWith   = routeObject.mergeWith
+                slot        = routeObject.slot
+                rules       = routeObject.rules
+                behavior    = routeObject.behavior
 
-                routeFn = ((spec, slot, route, behavior, wire) ->
+                routeFn = ((spec, mergeWith, slot, route, behavior, wire) ->
                     if spec != currentProspectSpec
-                        # spec module is not loaded yet
-                        wire.loadModule(spec).then (specObj) ->
-                            currentContext?.destroy()
 
-                            specObj.slot = slot
+                        wire.loadModule(spec).then (prospectObj) ->
+
+                            currentContext?.destroy()
+                            prospectObj.slot = slot
 
                             if behavior
-                                injectBechavior(specObj, behavior)
+                                injectBechavior(prospectObj, behavior)
 
-                            # spec from "routes" options section is wired
-                            wire.createChild(specObj).then (prospectCTX) ->
+                            console.log "prospectObj::::", prospectObj
 
-                                if behavior
-                                    sequenceBehavior(prospectCTX, route, wire)
+                            if mergeWith
+                                wire.loadModule(mergeWith).then (mergeWithObj) ->
+
+                                    console.log "mergeWithObj:::", mergeWithObj
+                                    
+                                    wire([mergeWithObj, prospectObj]).then (prospectCTX) ->
+
+                                        console.log "prospectCTX::::", prospectCTX
+
+                                        # do smth with prospectCTX
+                                        if behavior
+                                            sequenceBehavior(prospectCTX, route, wire)
                                 
-                                # renderingController.isReady state means that prospect template is rendered
-                                When(prospectCTX.renderingController.isReady()).then () ->
-                                    # set current
-                                    currentContext = prospectCTX
-                                    currentProspectSpec = spec
+                                        # renderingController.isReady state means that prospect template is rendered
+                                        When(prospectCTX.renderingController.isReady()).then () ->
+                                            # set current
+                                            currentContext = prospectCTX
+                                            currentProspectSpec = spec
 
-                                    startChildRouteWiring(prospectCTX, route, wire)
-                            , errorHandler
+                                            startChildRouteWiring(prospectCTX, route, wire)
+                                    , errorHandler
+                            else
+                                wire(prospectObj).then (prospectCTX) ->
+                                    # do smth with prospectCTX
+                                    if behavior
+                                        sequenceBehavior(prospectCTX, route, wire)
+                                
+                                    # renderingController.isReady state means that prospect template is rendered
+                                    When(prospectCTX.renderingController.isReady()).then () ->
+                                        # set current
+                                        currentContext = prospectCTX
+                                        currentProspectSpec = spec
+
+                                        startChildRouteWiring(prospectCTX, route, wire)
+
+                                , errorHandler
+
+                        # spec module is not loaded yet
+                        # wire.loadModule(spec).then (specObj) ->
+                        #     currentContext?.destroy()
+
+                        #     specObj.slot = slot
+
+                        #     if behavior
+                        #         injectBechavior(specObj, behavior)
+
+                        #     # spec from "routes" options section is wired
+                        #     wire.createChild(specObj).then (prospectCTX) ->
+
+                        #         if behavior
+                        #             sequenceBehavior(prospectCTX, route, wire)
+                                
+                        #         # renderingController.isReady state means that prospect template is rendered
+                        #         When(prospectCTX.renderingController.isReady()).then () ->
+                        #             # set current
+                        #             currentContext = prospectCTX
+                        #             currentProspectSpec = spec
+
+                        #             startChildRouteWiring(prospectCTX, route, wire)
+                        #     , errorHandler
                     else
                         # spec module is loaded, child route wiring must be started
                         startChildRouteWiring(currentContext, route, wire)
 
-                ).bind null, spec, slot, route, behavior, wire
+                ).bind null, spec, mergeWith, slot, route, behavior, wire
 
                 oneRoute = tempRouter.addRoute(route)
                 oneRoute.rules = rules 

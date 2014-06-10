@@ -25,7 +25,6 @@ define(["underscore"], function(_) {
       splitted = routeKey.split("/");
       zipped = _.zip(splitted, current);
       res = _.reduce(zipped, filterZipped, 1);
-      console.log("RES::", res, zipped);
       if (res) {
         childRouteObject = childRoutes[routeKey];
         childRouteObject.route = routeKey;

@@ -22,6 +22,7 @@ define ->
 
                 "{complexpart}/{infopart}"  :
                     spec: "specs/prospect/complex/spec"
+                    mergeWith: "components/request/packresponse/spec"
                     slot: {$ref: "dom.first!#prospect"}
                     rules:
                         complexpart: /\border\b/i
@@ -30,6 +31,7 @@ define ->
 
                 "{complexpart}/{infopart}/{id}/{side}"  :
                     spec: "specs/prospect/complex/spec"
+                    mergeWith: "components/request/packresponse/spec"
                     slot: {$ref: "dom.first!#prospect"}
                     rules:
                         complexpart: /\border\b/i
@@ -40,6 +42,7 @@ define ->
 
                 "{complexpart}/{infopart}/{id}/{object}/{objectId}"  :
                     spec: "specs/prospect/complex/spec"
+                    mergeWith: "components/request/packresponse/spec"
                     slot: {$ref: "dom.first!#prospect"}
                     rules:
                         complexpart: /\border\b/i
