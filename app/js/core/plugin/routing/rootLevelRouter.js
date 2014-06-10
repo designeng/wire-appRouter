@@ -22,9 +22,9 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
       return it && object.hasOwn(it, '$ref');
     };
     routeBinding = function(tempRouter, compDef, wire) {
-      var behavior, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref, _results;
+      var behavior, currentRootContextDeferred, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref;
+      currentRootContextDeferred = When.defer();
       _ref = compDef.options.routes;
-      _results = [];
       for (route in _ref) {
         routeObject = _ref[route];
         spec = routeObject.spec;
@@ -51,7 +51,8 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
               modulesResult[0].slot = slot;
               rootContext = createContext(modulesResult);
               return rootContext.then(function(prospectCTX) {
-                return console.log("----------prospectCTX::::", prospectCTX);
+                console.log("----------prospectCTX::::", prospectCTX);
+                return currentRootContextDeferred.resolve(prospectCTX);
               });
             });
           } else {
@@ -62,9 +63,9 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
         oneRoute.rules = rules;
         oneRoute.matched.add(routeFn);
         hasher.initialized.add(parseHash);
-        _results.push(hasher.changed.add(parseHash));
+        hasher.changed.add(parseHash);
+        return currentRootContextDeferred;
       }
-      return _results;
     };
     initializeRouter = function(resolver, compDef, wire) {
       if (isRef(compDef.options.childRoutes)) {
@@ -80,8 +81,7 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
 
       }
       return createRouter(compDef, wire).then(function(tempRouter) {
-        routeBinding(tempRouter, compDef, wire);
-        return resolver.resolve(tempRouter);
+        return resolver.resolve(routeBinding(tempRouter, compDef, wire));
       }, function(error) {
         return console.error(error.stack);
       });
