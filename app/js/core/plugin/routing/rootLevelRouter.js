@@ -105,6 +105,7 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
               modulesResult[0].slot = slot;
               rootContext = createContext(modulesResult);
               return rootContext.then(function(prospectCTX) {
+                console.log(">>>>>>>>>>>>>>>prospectCTX>>>>>>>>>>", prospectCTX);
                 return startChildRouteWiring(prospectCTX, route, wire);
               });
             });

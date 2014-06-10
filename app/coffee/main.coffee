@@ -13,12 +13,12 @@ require [
         prospectSpec
     ).then (resultCTX) ->
 
-        # child (components) route level
-        resultCTX.wire(
-            childRouteSpec
-        ).then (resultCTX) ->
+        # # child (components) route level
+        # resultCTX.wire(
+        #     childRouteSpec
+        # ).then (resultCTX) ->
 
-            console.log "resultCTX:::::---", resultCTX
+        console.log "resultCTX:::::---", resultCTX
 
-            hasher.prependHash = ""
-            hasher.init()
+        hasher.prependHash = ""
+        hasher.init()

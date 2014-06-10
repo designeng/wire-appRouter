@@ -1,8 +1,9 @@
+
+# experimental; used in main.js
 define ->
 
     $plugins:[
         "wire/debug"
-        # "wire/plugin/"
     ]
 
     # prospectRouter

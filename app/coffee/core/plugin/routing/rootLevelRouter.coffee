@@ -124,6 +124,7 @@ define [
                             rootContext = createContext(modulesResult)
 
                             rootContext.then (prospectCTX) ->
+                                console.log ">>>>>>>>>>>>>>>prospectCTX>>>>>>>>>>", prospectCTX
                                 startChildRouteWiring(prospectCTX, route, wire)
 
                     else
