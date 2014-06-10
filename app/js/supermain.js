@@ -84,9 +84,12 @@ require.config({
   locale: "ru"
 });
 
-require(["wire", "hasher", "wire!bootstrapSpec", "prospectSpec"], function(wire, hasher, bootstrapCTX, prospectSpec) {
+require(["wire", "hasher", "wire!bootstrapSpec", "prospectSpec", "specs/prospect/child/spec"], function(wire, hasher, bootstrapCTX, prospectSpec, childRouteSpec) {
   return bootstrapCTX.wire(prospectSpec).then(function(resultCTX) {
-    hasher.prependHash = "";
-    return hasher.init();
+    return resultCTX.wire(childRouteSpec).then(function(resultCTX) {
+      console.log("resultCTX:::::---", resultCTX);
+      hasher.prependHash = "";
+      return hasher.init();
+    });
   });
 });

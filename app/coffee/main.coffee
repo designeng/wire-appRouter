@@ -5,10 +5,20 @@ require [
     "hasher"
     "wire!bootstrapSpec"
     "prospectSpec"
-], (wire, hasher, bootstrapCTX, prospectSpec) ->
+    "specs/prospect/child/spec"
+], (wire, hasher, bootstrapCTX, prospectSpec, childRouteSpec) ->
 
+    # root (perspective) route level
     bootstrapCTX.wire(
         prospectSpec
     ).then (resultCTX) ->
-        hasher.prependHash = ""
-        hasher.init()
+
+        # child (components) route level
+        resultCTX.wire(
+            childRouteSpec
+        ).then (resultCTX) ->
+
+            console.log "resultCTX:::::---", resultCTX
+
+            hasher.prependHash = ""
+            hasher.init()
