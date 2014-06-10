@@ -4,8 +4,8 @@ define ->
         "core/plugin/routing/rootLevelRouter"
     ]
 
-    # childRoutes:
-    #     module: "specs/prospect/child/routes"
+    childRoutes:
+        module: "specs/prospect/child/routes"
 
     routeFilterStrategy:
         module: "specs/prospect/strategy/routeFilterStrategy"
@@ -54,4 +54,4 @@ define ->
 
             routeFilterStrategy: {$ref: "routeFilterStrategy"}
 
-            # childRoutes: {$ref: 'childRoutes'}
+            childRoutes: {$ref: 'childRoutes'}

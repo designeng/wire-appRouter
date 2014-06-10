@@ -1,6 +1,6 @@
-define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/lib/context', 'when/sequence'], function(_, crossroads, hasher, When, object, createContext, sequence) {
+define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/lib/context', "core/util/navigation/getCurrentRoute", 'when/sequence'], function(_, crossroads, hasher, When, object, createContext, getCurrentRoute, sequence) {
   return function(options) {
-    var childRoutes, createRouter, currentContext, currentProspectSpec, errorHandler, filterStrategy, initializeRouter, isRef, parseHash, pluginInstance, routeBinding, tempRouter;
+    var childRoutes, createRouter, currentContext, currentProspectSpec, errorHandler, filterStrategy, initializeRouter, injectBechavior, isRef, parseHash, pluginInstance, routeBinding, sequenceBehavior, startChildRouteWiring, tempRouter, wireChildRoute;
     currentContext = null;
     currentProspectSpec = void 0;
     tempRouter = void 0;
@@ -20,6 +20,60 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
     };
     isRef = function(it) {
       return it && object.hasOwn(it, '$ref');
+    };
+    startChildRouteWiring = function(prospectCTX, route, wire) {
+      var childRouteObject, properties;
+      childRouteObject = filterStrategy(childRoutes, route, getCurrentRoute().slice(1));
+      properties = {
+        spec: childRouteObject.spec,
+        slot: childRouteObject.slot,
+        behavior: childRouteObject.behavior,
+        subSpecs: childRouteObject.subSpecs,
+        route: childRouteObject.route,
+        options: childRouteObject.options
+      };
+      return wireChildRoute(prospectCTX, properties, wire);
+    };
+    wireChildRoute = function(prospectCTX, properties, wire) {
+      return wire.loadModule(properties.spec).then(function(childSpecObj) {
+        childSpecObj.slot = properties.slot;
+        if (properties.behavior) {
+          injectBechavior(childSpecObj, properties.behavior);
+        }
+        if (properties.options) {
+          childSpecObj.options = properties.options;
+        }
+        return prospectCTX.wire(childSpecObj).then(function(childCTX) {
+          var subSpec, _i, _len, _ref, _results;
+          if (properties.behavior) {
+            sequenceBehavior(childCTX, properties.route, wire);
+          }
+          if (properties.subSpecs) {
+            _ref = properties.subSpecs;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              subSpec = _ref[_i];
+              subSpec.route = properties.route;
+              _results.push(wireChildRoute(prospectCTX, subSpec, wire));
+            }
+            return _results;
+          }
+        });
+      });
+    };
+    injectBechavior = function(childSpecObj, behavior) {
+      if (!childSpecObj.$plugins) {
+        childSpecObj.$plugins = [];
+      }
+      childSpecObj.$plugins.push("core/plugin/behavior");
+      return childSpecObj.behavior = behavior;
+    };
+    sequenceBehavior = function(childCTX, route, wire) {
+      return When(wire.getProxy(childCTX.behavior), function(behaviorObj) {
+        var tasks;
+        tasks = behaviorObj.target;
+        return sequence(tasks, childCTX, route);
+      }, function() {});
     };
     routeBinding = function(tempRouter, compDef, wire) {
       var behavior, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref, _results;
@@ -51,9 +105,7 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
               modulesResult[0].slot = slot;
               rootContext = createContext(modulesResult);
               return rootContext.then(function(prospectCTX) {
-                var currentProspectCTX;
-                console.log("----------prospectCTX::::", prospectCTX);
-                return currentProspectCTX = prospectCTX;
+                return startChildRouteWiring(prospectCTX, route, wire);
               });
             });
           } else {

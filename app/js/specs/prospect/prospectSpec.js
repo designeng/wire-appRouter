@@ -1,6 +1,9 @@
 define(function() {
   return {
     $plugins: ["wire/debug", "core/plugin/routing/rootLevelRouter"],
+    childRoutes: {
+      module: "specs/prospect/child/routes"
+    },
     routeFilterStrategy: {
       module: "specs/prospect/strategy/routeFilterStrategy"
     },
@@ -61,6 +64,9 @@ define(function() {
         },
         routeFilterStrategy: {
           $ref: "routeFilterStrategy"
+        },
+        childRoutes: {
+          $ref: 'childRoutes'
         }
       }
     }
