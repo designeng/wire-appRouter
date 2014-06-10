@@ -36,8 +36,6 @@ define [
 
         routeBinding = (tempRouter, compDef, wire) ->
 
-            currentRootContextDeferred = When.defer()
-
             for route, routeObject of compDef.options.routes
 
                 spec        = routeObject.spec
@@ -68,8 +66,7 @@ define [
 
                             rootContext.then (prospectCTX) ->
                                 console.log "----------prospectCTX::::", prospectCTX
-
-                                currentRootContextDeferred.resolve prospectCTX
+                                currentProspectCTX = prospectCTX 
 
 
                             # for specObject in modulesResult
@@ -134,8 +131,6 @@ define [
                 hasher.initialized.add(parseHash)
                 hasher.changed.add(parseHash)
                 # hasher init() call must be somewhere in main context
-
-                return currentRootContextDeferred
 
         initializeRouter = (resolver, compDef, wire) ->
             if isRef(compDef.options.childRoutes)

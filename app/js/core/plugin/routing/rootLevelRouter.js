@@ -22,9 +22,9 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
       return it && object.hasOwn(it, '$ref');
     };
     routeBinding = function(tempRouter, compDef, wire) {
-      var behavior, currentRootContextDeferred, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref;
-      currentRootContextDeferred = When.defer();
+      var behavior, mergeWith, oneRoute, route, routeFn, routeObject, rules, slot, spec, _ref, _results;
       _ref = compDef.options.routes;
+      _results = [];
       for (route in _ref) {
         routeObject = _ref[route];
         spec = routeObject.spec;
@@ -51,8 +51,9 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
               modulesResult[0].slot = slot;
               rootContext = createContext(modulesResult);
               return rootContext.then(function(prospectCTX) {
+                var currentProspectCTX;
                 console.log("----------prospectCTX::::", prospectCTX);
-                return currentRootContextDeferred.resolve(prospectCTX);
+                return currentProspectCTX = prospectCTX;
               });
             });
           } else {
@@ -63,9 +64,9 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
         oneRoute.rules = rules;
         oneRoute.matched.add(routeFn);
         hasher.initialized.add(parseHash);
-        hasher.changed.add(parseHash);
-        return currentRootContextDeferred;
+        _results.push(hasher.changed.add(parseHash));
       }
+      return _results;
     };
     initializeRouter = function(resolver, compDef, wire) {
       if (isRef(compDef.options.childRoutes)) {

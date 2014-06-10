@@ -1,6 +1,17 @@
 define(function() {
   return {
     $plugins: ["wire/debug"],
+    controller: {
+      create: "specs/prospect/child/controller",
+      properties: {
+        prospectRouter: {
+          $ref: "prospectRouter"
+        }
+      },
+      ready: {
+        "onReady": {}
+      }
+    },
     autoCompleteRoute: {
       literal: {
         spec: "components/autocomplete/spec",

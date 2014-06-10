@@ -5,6 +5,14 @@ define ->
         # "wire/plugin/"
     ]
 
+    # prospectRouter
+    controller:
+        create: "specs/prospect/child/controller"
+        properties:
+            prospectRouter: {$ref: "prospectRouter"}
+        ready:
+            "onReady": {}
+
     autoCompleteRoute:
         literal:
             spec: "components/autocomplete/spec"
