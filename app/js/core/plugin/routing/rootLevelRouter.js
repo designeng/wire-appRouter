@@ -33,11 +33,20 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/l
         rules = routeObject.rules;
         behavior = routeObject.behavior;
         routeFn = (function(spec, mergeWith, slot, route, behavior, wire) {
-          var mergeWithPromise, specPromise;
+          var mergingModule, promisedModules, specPromise, _i, _len;
           if (spec !== currentProspectSpec) {
+            promisedModules = [];
             specPromise = wire.loadModule(spec);
-            mergeWithPromise = wire.loadModule(mergeWith);
-            return When.all([specPromise, mergeWithPromise]).then(function(modulesResult) {
+            promisedModules.push(specPromise);
+            if (_.isString(mergeWith)) {
+              promisedModules.push(wire.loadModule(mergeWith));
+            } else if (_.isArray(mergeWith)) {
+              for (_i = 0, _len = mergeWith.length; _i < _len; _i++) {
+                mergingModule = mergeWith[_i];
+                promisedModules.push(wire.loadModule(mergingModule));
+              }
+            }
+            return When.all(promisedModules).then(function(modulesResult) {
               var rootContext;
               modulesResult[0].slot = slot;
               rootContext = createContext(modulesResult);

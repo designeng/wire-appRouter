@@ -4,7 +4,6 @@ define ->
         'wire/debug'
         'wire/dom'
         'wire/dom/render'
-        "core/plugin/serviceHub"
     ]
 
     prospectView:

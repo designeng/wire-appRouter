@@ -10,8 +10,8 @@ define ->
         create: "components/request/packresponse/controller"
 
         ready:
-            "sendRequest": ["packResponseService", {cpid: 15000002213}]
+            "sendRequest": ["autocompleteService"]
 
         bindToService: [
-            "packResponseService"
+            "autocompleteService"
         ]

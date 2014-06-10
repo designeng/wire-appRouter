@@ -46,10 +46,18 @@ define [
                 routeFn = ((spec, mergeWith, slot, route, behavior, wire) ->
                     if spec != currentProspectSpec
 
+                        promisedModules = []
                         specPromise = wire.loadModule(spec)
-                        mergeWithPromise = wire.loadModule(mergeWith)
+                        promisedModules.push specPromise
 
-                        When.all([specPromise, mergeWithPromise]).then (modulesResult) ->
+                        # mergeWith may be {String | Array}
+                        if _.isString mergeWith
+                            promisedModules.push wire.loadModule(mergeWith)
+                        else if _.isArray mergeWith
+                            for mergingModule in mergeWith
+                                promisedModules.push wire.loadModule(mergingModule)
+
+                        When.all(promisedModules).then (modulesResult) ->
 
                             modulesResult[0].slot = slot
 
