@@ -1,7 +1,7 @@
 define ->
     $plugins:[
         "wire/debug"
-        "core/plugin/appRouter"
+        "core/plugin/routing/rootLevelRouter"
     ]
 
     childRoutes:
@@ -11,14 +11,15 @@ define ->
         module: "specs/prospect/strategy/routeFilterStrategy"
 
     prospectRouter:
-        appRouter:
+        rootLevelRouter:
             routes: 
                 "{plain}"  :   
                     spec: "specs/prospect/plain/spec"
+                    mergeWith: "components/request/packresponse/spec"
                     slot: {$ref: "dom.first!#prospect"}
                     rules:
                         plain: /^autocomplete|^calendar/i
-                    behavior: {$ref: "behavior!doSmth   "}
+                    behavior: {$ref: "behavior!doSmth"}
 
                 "{complexpart}/{infopart}"  :
                     spec: "specs/prospect/complex/spec"

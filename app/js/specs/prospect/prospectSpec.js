@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ["wire/debug", "core/plugin/appRouter"],
+    $plugins: ["wire/debug", "core/plugin/routing/rootLevelRouter"],
     childRoutes: {
       module: "specs/prospect/child/routes"
     },
@@ -8,10 +8,11 @@ define(function() {
       module: "specs/prospect/strategy/routeFilterStrategy"
     },
     prospectRouter: {
-      appRouter: {
+      rootLevelRouter: {
         routes: {
           "{plain}": {
             spec: "specs/prospect/plain/spec",
+            mergeWith: "components/request/packresponse/spec",
             slot: {
               $ref: "dom.first!#prospect"
             },
@@ -19,7 +20,7 @@ define(function() {
               plain: /^autocomplete|^calendar/i
             },
             behavior: {
-              $ref: "behavior!doSmth   "
+              $ref: "behavior!doSmth"
             }
           },
           "{complexpart}/{infopart}": {
