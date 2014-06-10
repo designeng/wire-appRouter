@@ -6,8 +6,9 @@ define [
     "hasher"
     'when'
     'wire/lib/object'
+    'wire/lib/context'
     'when/sequence'
-], (_, crossroads, hasher, When, object, sequence) ->
+], (_, crossroads, hasher, When, object, createContext, sequence) ->
 
     return (options) ->
 
@@ -49,9 +50,12 @@ define [
                         mergeWithPromise = wire.loadModule(mergeWith)
 
                         When.all([specPromise, mergeWithPromise]).then (modulesResult) ->
-                            console.log "RESULT::::", modulesResult
 
-                            wire(modulesResult).then (prospectCTX) ->
+                            modulesResult[0].slot = slot
+
+                            rootContext = createContext(modulesResult)
+
+                            rootContext.then (prospectCTX) ->
                                 console.log "----------prospectCTX::::", prospectCTX
 
 

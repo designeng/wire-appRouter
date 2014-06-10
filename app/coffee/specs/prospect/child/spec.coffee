@@ -2,6 +2,7 @@ define ->
 
     $plugins:[
         "wire/debug"
+        # "wire/plugin/"
     ]
 
     autoCompleteRoute:

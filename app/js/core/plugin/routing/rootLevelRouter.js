@@ -1,4 +1,4 @@
-define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'when/sequence'], function(_, crossroads, hasher, When, object, sequence) {
+define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'wire/lib/context', 'when/sequence'], function(_, crossroads, hasher, When, object, createContext, sequence) {
   return function(options) {
     var childRoutes, createRouter, currentContext, currentProspectSpec, errorHandler, filterStrategy, initializeRouter, isRef, parseHash, pluginInstance, routeBinding, tempRouter;
     currentContext = null;
@@ -38,8 +38,10 @@ define(["underscore", "crossroads", "hasher", 'when', 'wire/lib/object', 'when/s
             specPromise = wire.loadModule(spec);
             mergeWithPromise = wire.loadModule(mergeWith);
             return When.all([specPromise, mergeWithPromise]).then(function(modulesResult) {
-              console.log("RESULT::::", modulesResult);
-              return wire(modulesResult).then(function(prospectCTX) {
+              var rootContext;
+              modulesResult[0].slot = slot;
+              rootContext = createContext(modulesResult);
+              return rootContext.then(function(prospectCTX) {
                 return console.log("----------prospectCTX::::", prospectCTX);
               });
             });
