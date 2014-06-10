@@ -25,7 +25,7 @@ define ->
             'listCollection.onEdit': 'onItemClick'
 
     # wrapper for input and list
-    autocompleteFormView:
+    specMainView:
         render:
             template:
                 module: "text!components/autocomplete/form.html"
@@ -42,7 +42,7 @@ define ->
             css:
                 module: "css!components/autocomplete/list/styles.css"
         insert:
-            at: {$ref: 'dom.first!.listWrapper', at: {$ref: 'autocompleteFormView'}}
+            at: {$ref: 'dom.first!.listWrapper', at: {$ref: 'specMainView'}}
         on:
             'click:.item': 'listCollection.edit'
         bind:
@@ -63,7 +63,7 @@ define ->
             css:
                 module: "css!components/autocomplete/input/style.css"
         insert:
-            at: {$ref: 'dom.first!.inputWrapper', at: {$ref: 'autocompleteFormView'}}
+            at: {$ref: 'dom.first!.inputWrapper', at: {$ref: 'specMainView'}}
         on:
             'keyup': 'controller.onTextInputKeyUp'
 

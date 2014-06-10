@@ -49,7 +49,7 @@ define(function() {
         $ref: "dom.first!#pageRight"
       }
     },
-    "order/info/{id}/flight": {
+    "order/info/{id}/flight/{flightId}": {
       spec: "components/flight/spec",
       slot: {
         $ref: "dom.first!#pageLeft"

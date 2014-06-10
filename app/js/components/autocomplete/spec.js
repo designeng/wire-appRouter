@@ -24,7 +24,7 @@ define(function() {
         'listCollection.onEdit': 'onItemClick'
       }
     },
-    autocompleteFormView: {
+    specMainView: {
       render: {
         template: {
           module: "text!components/autocomplete/form.html"
@@ -52,7 +52,7 @@ define(function() {
         at: {
           $ref: 'dom.first!.listWrapper',
           at: {
-            $ref: 'autocompleteFormView'
+            $ref: 'specMainView'
           }
         }
       },
@@ -86,7 +86,7 @@ define(function() {
         at: {
           $ref: 'dom.first!.inputWrapper',
           at: {
-            $ref: 'autocompleteFormView'
+            $ref: 'specMainView'
           }
         }
       },
