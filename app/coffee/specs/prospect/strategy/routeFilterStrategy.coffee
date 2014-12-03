@@ -9,22 +9,21 @@ define [
         last  = pair[1]
 
         if _.isUndefined(first)
-            return 0
+            return memo * 0
 
         if first.match("\\{(.*)}") and !_.isUndefined last
-            return 1
+            return memo * 1
 
         if first != last 
-            return 0
+            return memo * 0
         else
-            return 1
+            return memo * 1
 
     # @param childRoutes {Object}
     routeFilterStrategy = (childRoutes, route, currentRoute) ->
-
         current = currentRoute.split("/")
 
-        childRoutesKeys = _.keys childRoutes 
+        childRoutesKeys = _.keys childRoutes
 
         for routeKey in childRoutesKeys
             splitted = routeKey.split("/")
@@ -32,6 +31,7 @@ define [
 
             # res in result will be 1 or 0
             # 1 - routeKey is matched to currentRoute, 0 - not matched
+
             res = _.reduce(zipped, filterZipped, 1)
 
             if res

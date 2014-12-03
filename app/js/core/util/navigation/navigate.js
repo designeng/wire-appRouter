@@ -11,6 +11,12 @@ define(["hasher"], function(hasher) {
       } else {
         return hasher.setHash(route + "/" + tail);
       }
+    } else if (mode === "relative") {
+      return window.location.hash = route;
+    } else if (mode === "absolute") {
+      return window.location.href = route;
+    } else if (mode === "replace") {
+      return hasher.replaceHash(route);
     }
   };
 });

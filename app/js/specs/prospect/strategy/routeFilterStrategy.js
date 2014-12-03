@@ -5,15 +5,15 @@ define(["underscore"], function(_) {
     first = pair[0];
     last = pair[1];
     if (_.isUndefined(first)) {
-      return 0;
+      return memo * 0;
     }
     if (first.match("\\{(.*)}") && !_.isUndefined(last)) {
-      return 1;
+      return memo * 1;
     }
     if (first !== last) {
-      return 0;
+      return memo * 0;
     } else {
-      return 1;
+      return memo * 1;
     }
   };
   routeFilterStrategy = function(childRoutes, route, currentRoute) {

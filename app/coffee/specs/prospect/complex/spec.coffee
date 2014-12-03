@@ -5,7 +5,6 @@ define ->
         'wire/dom'
         'wire/on'
         'wire/dom/render'
-        'cola'
     ]
 
     prospectView:

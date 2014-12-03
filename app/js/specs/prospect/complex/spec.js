@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ['wire/debug', 'wire/dom', 'wire/on', 'wire/dom/render', 'cola'],
+    $plugins: ['wire/debug', 'wire/dom', 'wire/on', 'wire/dom/render'],
     prospectView: {
       render: {
         template: {
