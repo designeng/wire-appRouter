@@ -8,8 +8,11 @@ define [
         shiftCenter         : shift.shiftCenter
         shiftRight          : shift.shiftRight
 
+        sendMessage         : (str) ->
+            console.debug "MESSAGE:::"
+
         doSmth				: () ->
-        	console.log "DO SOMETHING"
+        	console.debug "DO SOMETHING"
     }
 
     return index

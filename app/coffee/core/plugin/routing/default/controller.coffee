@@ -22,18 +22,20 @@ define [
             i = 0
             size = _.size @groundRoutes
             _.forEach @groundRoutes, (routeValue, routeKey) =>
-                console.debug "routeKey", routeKey, routeValue 
                 i++
 
                 routeHandler = do (routeValue = routeValue, routeKey = routeKey) =>
                     return () =>
                         When(@environment.loadInEnvironment(routeValue.spec, routeValue.mergeWith, {slot: routeValue.slot})).then (context) =>
+
                             child = @filterStrategy(@childRoutes, routeKey, @getCurrentRoute())
                             
                             @contextController.registerContext context, routeValue.spec, "ground"
                             @contextController.setRouteData(child, routeKey)
 
                             @processChildRoute(context, child, routeKey)
+                        .otherwise (error) ->
+                            console.error "ERROR:::", error
 
                 # register route
                 new Route(routeKey, routeValue.rules, routeHandler)

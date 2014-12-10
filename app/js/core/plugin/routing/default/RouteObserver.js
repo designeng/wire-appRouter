@@ -95,7 +95,6 @@ define(["underscore", "meld", "signals"], function(_, meld, Signal) {
 
     RouteObserver.prototype.update = function(child, groundRouteKey) {
       var mutations, positions;
-      console.debug(">>>>>update with options:::child, groundRouteKey", child, groundRouteKey);
       positions = this.calculatePositions(child);
       if (!this.theSame(child.params, this.currentParams)) {
         mutations = this.indexesOfMutation(child.params, this.currentParams);

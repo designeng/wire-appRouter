@@ -27,8 +27,7 @@ define [
             object = _.extend object, environment
             if typeof environment.behavior != "undefined"
                 object.$plugins = [] unless object.$plugins
-                # object.$plugins.push "core/plugin/behavior"
-                object.$plugins.push "behaviorPlugin"
+                object.$plugins.push "core/plugin/behavior"
             return object
 
         # @param {String} specId - spec field in route configuration
@@ -41,6 +40,5 @@ define [
             When.all(promisedModules).then (modulesResult) =>
                 modulesResult[0] = @applyEnvironment modulesResult[0], environment
                 @pluginWireFn.createChild(modulesResult).then (context) =>
-                    console.debug ":::::::loadInEnvironment:::::>>>context::: ", context, modulesResult[0]
                     deferred.resolve(context)
             return deferred.promise

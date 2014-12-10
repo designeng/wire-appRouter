@@ -12,6 +12,5 @@ define [
             hasher.initialized.add(@parseHash)
             hasher.changed.add(@parseHash)
 
-            # TODO: left it here or move to mainController ?
             hasher.prependHash = ""
             hasher.init()

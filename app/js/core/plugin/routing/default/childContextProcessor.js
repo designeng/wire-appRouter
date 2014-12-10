@@ -39,10 +39,11 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     };
 
     ChildContextProcessor.prototype.deliver = function(parentContext, bundle) {
-      var distributive, tasks;
+      var distributive, noop, tasks;
       this.parentContext = parentContext;
       tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
       distributive = this.provideFunctions(this.distributeTasks(tasks));
+      noop = function() {};
       return _.each(bundle, function(item, index) {
         var _this = this;
         if (index === 1) {
@@ -50,7 +51,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         }
         return pipeline(distributive["filters"], item).then(function(result) {
           return pipeline(distributive["tasks"], result).then(function(res) {
-            return console.debug("");
+            return noop();
           }, function(err) {
             return console.error("PIPELINE TASKS ERR:::", err);
           });
@@ -72,8 +73,6 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       };
       if (typeof child.behavior !== "undefined") {
         environment["behavior"] = child.behavior;
-      } else {
-        console.debug("NO BEHAVIOR", child);
       }
       return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childResultContext) {
         _this.contextController.registerContext(childResultContext, child.spec, "child");
@@ -92,7 +91,6 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     };
 
     ChildContextProcessor.prototype.synchronize = function(childContext) {
-      console.debug("synchronize", childContext);
       if (childContext.synchronizeWithRoute != null) {
         childContext.synchronizeWithRoute.call(childContext);
       }

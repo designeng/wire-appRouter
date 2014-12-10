@@ -96,6 +96,9 @@ define({
     },
     afterFulfilling: {
       "registerGroundRoutes": "hasherInitializator.initialize"
+    },
+    ready: {
+      registerGroundRoutes: {}
     }
   }
 });

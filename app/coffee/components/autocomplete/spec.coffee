@@ -10,9 +10,6 @@ define ->
         'cola'
     ]
 
-    $exports:
-        $ref: 'controller'
-
     controller:
         create: "components/autocomplete/controller"
         properties:

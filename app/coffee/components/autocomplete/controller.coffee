@@ -11,7 +11,6 @@ define ->
         listCollection: undefined
 
         onReady: ->
-            console.log "__@listCollection"
 
             # setTimeout(()=>
             #     @listCollection.adapters[1].onAdd = (item) ->

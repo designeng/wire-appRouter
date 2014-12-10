@@ -87,8 +87,6 @@ define [
             return !!_.intersection(mutations, positions).length
 
         update: (child, groundRouteKey) ->
-            console.debug ">>>>>update with options:::child, groundRouteKey", child, groundRouteKey
-
             positions = @calculatePositions child
 
             # it should be always different, checking is not needed in general

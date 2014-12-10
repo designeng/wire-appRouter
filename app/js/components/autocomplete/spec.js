@@ -1,9 +1,6 @@
 define(function() {
   return {
     $plugins: ['wire/debug', 'wire/on', 'wire/dom', 'wire/dom/render', 'wire/connect', 'cola'],
-    $exports: {
-      $ref: 'controller'
-    },
     controller: {
       create: "components/autocomplete/controller",
       properties: {

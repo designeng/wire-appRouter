@@ -4,9 +4,6 @@ define(function() {
     childRoutes: {
       module: "specs/prospect/child/routes"
     },
-    routeFilterStrategy: {
-      module: "specs/prospect/strategy/routeFilterStrategy"
-    },
     prospectRouter: {
       appRouter: {
         groundRoutes: {

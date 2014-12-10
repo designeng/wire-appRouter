@@ -24,7 +24,6 @@ define(["underscore", "when", "./route"], function(_, When, Route) {
       size = _.size(this.groundRoutes);
       _.forEach(this.groundRoutes, function(routeValue, routeKey) {
         var routeHandler;
-        console.debug("routeKey", routeKey, routeValue);
         i++;
         routeHandler = (function(routeValue, routeKey) {
           return function() {
@@ -36,6 +35,8 @@ define(["underscore", "when", "./route"], function(_, When, Route) {
               _this.contextController.registerContext(context, routeValue.spec, "ground");
               _this.contextController.setRouteData(child, routeKey);
               return _this.processChildRoute(context, child, routeKey);
+            }).otherwise(function(error) {
+              return console.error("ERROR:::", error);
             });
           };
         })(routeValue, routeKey);

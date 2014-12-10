@@ -1,6 +1,7 @@
 define ->
 
     $plugins: [
+        'wire/debug'
         'wire/dom'
         'wire/dom/render'
     ]

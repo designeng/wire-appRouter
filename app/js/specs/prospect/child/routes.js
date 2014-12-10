@@ -7,7 +7,7 @@ define(function() {
         $ref: "dom.first!#page"
       },
       behavior: {
-        $ref: "behavior!doSmth"
+        $ref: "behavior!sendMessage"
       }
     },
     "calendar": {

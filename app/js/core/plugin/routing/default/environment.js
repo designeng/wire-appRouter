@@ -28,7 +28,7 @@ define(["underscore", "when"], function(_, When) {
         if (!object.$plugins) {
           object.$plugins = [];
         }
-        object.$plugins.push("behaviorPlugin");
+        object.$plugins.push("core/plugin/behavior");
       }
       return object;
     };
@@ -41,7 +41,6 @@ define(["underscore", "when"], function(_, When) {
       When.all(promisedModules).then(function(modulesResult) {
         modulesResult[0] = _this.applyEnvironment(modulesResult[0], environment);
         return _this.pluginWireFn.createChild(modulesResult).then(function(context) {
-          console.debug(":::::::loadInEnvironment:::::>>>context::: ", context, modulesResult[0]);
           return deferred.resolve(context);
         });
       });

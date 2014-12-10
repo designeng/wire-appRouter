@@ -60,3 +60,5 @@ define
             childRoutes                 : {$ref: 'childRoutes'}
         afterFulfilling:
             "registerGroundRoutes": "hasherInitializator.initialize"
+        ready:
+            registerGroundRoutes: {}

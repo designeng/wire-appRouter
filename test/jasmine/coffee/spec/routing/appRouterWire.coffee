@@ -115,6 +115,7 @@ define [
         $plugins:[
             "wire/debug"
             "core/plugin/routing/appRouterWire"
+            "behaviorPlugin"
         ]
 
         controller:

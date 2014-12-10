@@ -5,10 +5,8 @@ require [
     "hasher"
     "wire!bootstrapSpec"
     "specs/prospect/prospectWireSpec"
-], (wire, hasher, bootstrapCTX, prospectSpec) ->
+], (wire, hasher, bootstrapCTX, prospectWireSpec) ->
 
     bootstrapCTX.wire(
-        prospectSpec
+        prospectWireSpec
     ).then (resultCTX) ->
-        hasher.prependHash = ""
-        hasher.init()

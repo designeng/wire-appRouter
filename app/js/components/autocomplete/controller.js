@@ -9,9 +9,7 @@ define(function() {
 
     AutoCompleteController.prototype.listCollection = void 0;
 
-    AutoCompleteController.prototype.onReady = function() {
-      return console.log("__@listCollection");
-    };
+    AutoCompleteController.prototype.onReady = function() {};
 
     AutoCompleteController.prototype.onItemClick = function(item) {
       return console.log("____click");

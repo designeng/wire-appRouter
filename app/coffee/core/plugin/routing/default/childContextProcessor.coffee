@@ -43,13 +43,14 @@ define [
                 "synchronize"
             ]
             distributive = @provideFunctions(@distributeTasks(tasks))
+            noop = ->
 
             _.each bundle, (item, index) ->
                 if index == 1
                     delete item.behavior
                 pipeline(distributive["filters"], item).then (result) =>
                     pipeline(distributive["tasks"], result).then (res) =>
-                        console.debug ""
+                        noop()
                     , (err) ->
                         console.error "PIPELINE TASKS ERR:::", err
                 , (reason) ->
@@ -66,8 +67,6 @@ define [
 
             if typeof child.behavior != "undefined"
                 environment["behavior"] = child.behavior
-            else
-                console.debug "NO BEHAVIOR", child
 
             return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childResultContext) =>
                 # register context
@@ -83,8 +82,6 @@ define [
                 return childContext
 
         synchronize: (childContext) ->
-            console.debug "synchronize", childContext
-
             if childContext.synchronizeWithRoute?
                 childContext.synchronizeWithRoute.call childContext
             return childContext

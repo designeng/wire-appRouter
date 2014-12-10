@@ -128,7 +128,7 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
     }
   };
   appRouterWireSpec = {
-    $plugins: ["wire/debug", "core/plugin/routing/appRouterWire"],
+    $plugins: ["wire/debug", "core/plugin/routing/appRouterWire", "behaviorPlugin"],
     controller: {
       appRouter: {
         groundRoutes: groundRoutes,
