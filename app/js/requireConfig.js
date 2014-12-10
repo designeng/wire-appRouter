@@ -78,8 +78,7 @@ require.config({
   },
   paths: {
     "bootstrapSpec": "specs/bootstrapSpec",
-    "prospectSpec": "specs/prospect/prospectSpec",
-    "navigate": "core/util/navigation/navigate"
+    "prospectSpec": "specs/prospect/prospectSpec"
   },
   locale: "ru"
 });

@@ -1,4 +1,4 @@
-define(["underscore", "hasher", "navigate"], function(_, hasher, navigate) {
+define(["underscore", "hasher", "core/util/navigation/navigate"], function(_, hasher, navigate) {
   var navigateToPrevious;
   return navigateToPrevious = function() {
     var routeAsArray;

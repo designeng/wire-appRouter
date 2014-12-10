@@ -1,7 +1,7 @@
 define [
     "underscore"
     "hasher"
-    "navigate"
+    "core/util/navigation/navigate"
 ], (_, hasher, navigate) -> 
     navigateToPrevious = () ->
         routeAsArray = hasher.getHashAsArray()

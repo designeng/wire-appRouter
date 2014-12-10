@@ -78,13 +78,12 @@ require.config({
   },
   paths: {
     "bootstrapSpec": "specs/bootstrapSpec",
-    "prospectSpec": "specs/prospect/prospectSpec",
-    "navigate": "core/util/navigation/navigate"
+    "prospectSpec": "specs/prospect/prospectSpec"
   },
   locale: "ru"
 });
 
-require(["wire", "hasher", "wire!bootstrapSpec", "prospectSpec"], function(wire, hasher, bootstrapCTX, prospectSpec) {
+require(["wire", "hasher", "wire!bootstrapSpec", "specs/prospect/prospectWireSpec"], function(wire, hasher, bootstrapCTX, prospectSpec) {
   return bootstrapCTX.wire(prospectSpec).then(function(resultCTX) {
     hasher.prependHash = "";
     return hasher.init();

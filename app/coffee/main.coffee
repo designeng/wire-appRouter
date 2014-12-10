@@ -4,7 +4,7 @@ require [
     "wire"
     "hasher"
     "wire!bootstrapSpec"
-    "prospectSpec"
+    "specs/prospect/prospectWireSpec"
 ], (wire, hasher, bootstrapCTX, prospectSpec) ->
 
     bootstrapCTX.wire(

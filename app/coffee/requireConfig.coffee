@@ -102,6 +102,4 @@ require.config
         "bootstrapSpec" : "specs/bootstrapSpec"
         "prospectSpec"  : "specs/prospect/prospectSpec"
 
-        "navigate": "core/util/navigation/navigate"
-
     locale: "ru"

@@ -22,10 +22,10 @@ define [
                     wire:
                         spec: defaultAppRouter
                         provide:
-                            pluginWireFn    : wire
-                            appRouterController: {$ref: 'appRouterController'}
-                            groundRoutes    : compDef.options.groundRoutes
-                            childRoutes     : compDef.options.childRoutes
+                            pluginWireFn           : wire
+                            appRouterController    : {$ref: 'appRouterController'}
+                            groundRoutes           : compDef.options.groundRoutes
+                            childRoutes            : compDef.options.childRoutes
             }).then (context) ->
                 resolver.resolve(context)
 
