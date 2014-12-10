@@ -100,6 +100,5 @@ require.config
 
         # specs
         "bootstrapSpec" : "specs/bootstrapSpec"
-        "prospectSpec"  : "specs/prospect/prospectSpec"
 
     locale: "ru"

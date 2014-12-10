@@ -1,6 +1,6 @@
 define(function() {
   var childRoutes;
-  childRoutes = {
+  return childRoutes = {
     "autocomplete": {
       spec: "components/autocomplete/spec",
       slot: {
@@ -44,5 +44,4 @@ define(function() {
       }
     }
   };
-  return childRoutes;
 });

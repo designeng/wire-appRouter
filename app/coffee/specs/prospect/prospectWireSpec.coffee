@@ -37,8 +37,3 @@ define ->
                         side: /\bflight\b/i
 
             childRoutes: {$ref: 'childRoutes'}
-            # childRoutes:
-            #     "autocomplete"  :   
-            #         spec: "components/autocomplete/spec"
-            #         slot: {$ref: "dom.first!#page"}
-            #         behavior: {$ref: "behavior!sendMessage"}

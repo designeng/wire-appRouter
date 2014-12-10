@@ -29,8 +29,3 @@ define ->
         "order/center"  : 
             spec: "components/orderinfo/spec"
             slot: {$ref: "dom.first!#pageCenter"}
-
-
-
-
-    return childRoutes
