@@ -1,4 +1,4 @@
 define(function() {
   var specs;
-  return specs = ["core/router/contextRouter"];
+  return specs = ["routing/appRouterWire"];
 });

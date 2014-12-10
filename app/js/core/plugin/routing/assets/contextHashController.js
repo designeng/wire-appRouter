@@ -10,7 +10,6 @@ define(["underscore"], function(_) {
     ContextHashController.prototype.resetHash = function() {
       _.each(this.contextHash, function(cpidCasheObject) {
         return _.each(cpidCasheObject, function(context) {
-          console.debug("remove::::", context);
           return context.destroy();
         });
       });
@@ -62,6 +61,7 @@ define(["underscore"], function(_) {
       var cpid;
       cpid = this.getCpid(route);
       if (cpid) {
+        this.contextHash[cpid][spec].destroy();
         return delete this.contextHash[cpid][spec];
       }
     };

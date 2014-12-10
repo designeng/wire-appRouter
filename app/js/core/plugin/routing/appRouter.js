@@ -1,14 +1,10 @@
-define(["underscore", "hasher", 'when', 'wire/lib/object', "core/util/navigation/navigate", "core/util/navigation/getCurrentCpid", "core/util/navigation/navigateToError", "core/plugin/routing/assets/appRouterController", "core/plugin/routing/assets/contextHashController", "when/sequence", "specs/reporter/spec"], function(_, hasher, When, object, navigate, getCurrentCpid, navigateToError, appRouterController, contextHashController, sequence, reporterSpec) {
+define(["underscore", "hasher", 'when', "meld", 'wire/lib/object', "core/util/navigation/navigate", "core/util/navigation/getCurrentCpid", "core/util/navigation/navigateToError", "core/plugin/routing/assets/appRouterController", "core/plugin/routing/assets/contextHashController", "when/sequence", "specs/reporter/spec"], function(_, hasher, When, meld, object, navigate, getCurrentCpid, navigateToError, appRouterController, contextHashController, sequence, reporterSpec) {
   return function(options) {
-    var childRoutes, childSpecs, errorHandler, filterStrategy, getCurrentHash, getCurrentRoute, initializeRouter, injectBechavior, isRef, noop, normalizeAccessPolicy, parseHash, pluginInstance, prospectContextWireChildObj, routeBinding, sequenceBehavior, startChildRouteWiring, synchronizeWithRoute, wireChildRouteSpec, _currentRoute;
+    var childRoutes, childSpecs, filterStrategy, getCurrentHash, getCurrentRoute, initializeRouter, injectBechavior, isRef, normalizeAccessPolicy, parseHash, pluginInstance, prospectContextWireChildObj, routeBinding, sequenceBehavior, startChildRouteWiring, synchronizeWithRoute, wireChildRouteSpec, _currentRoute;
     _currentRoute = void 0;
     filterStrategy = void 0;
     childRoutes = void 0;
     childSpecs = [];
-    noop = function() {};
-    errorHandler = function(error) {
-      return console.error(error.stack);
-    };
     parseHash = function(newHash, oldHash) {
       return appRouterController.parse(newHash);
     };
@@ -61,6 +57,7 @@ define(["underscore", "hasher", 'when', 'wire/lib/object', "core/util/navigation
       _currentRoute = getCurrentRoute();
       _context = contextHashController.getCachedContext(_currentRoute, childRouteObject.spec);
       if (!_context) {
+        console.debug("PREVIOUS CONTEXT SHOULD BE REMOVED?????", _currentRoute.params, contextHashController.getHash());
         return wire.loadModule(childRouteObject.spec).then(function(childSpecObj) {
           childSpecObj.slot = childRouteObject.slot;
           if (childRouteObject.behavior) {
@@ -133,7 +130,7 @@ define(["underscore", "hasher", 'when', 'wire/lib/object', "core/util/navigation
       _currentContext = null;
       _currentProspectSpec = void 0;
       _cpid = void 0;
-      _ref = compDef.options.routes;
+      _ref = compDef.options.groundRoutes;
       _results = [];
       for (route in _ref) {
         routeObject = _ref[route];
@@ -197,8 +194,8 @@ define(["underscore", "hasher", 'when', 'wire/lib/object', "core/util/navigation
           return _results;
         });
       }
-      if (isRef(compDef.options.routeFilterStrategy)) {
-        wire(compDef.options.routeFilterStrategy).then(function(strategy) {
+      if (isRef(compDef.options.filterStrategy)) {
+        wire(compDef.options.filterStrategy).then(function(strategy) {
           return filterStrategy = strategy;
         });
       } else {

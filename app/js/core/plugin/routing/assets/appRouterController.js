@@ -10,6 +10,9 @@ define(["crossroads", "core/util/navigation/navigateToError"], function(crossroa
       router.getCurrentRoute = function() {
         return this._prevRoutes[0];
       };
+      router.getCurrentRouteHash = function() {
+        return this._prevRoutes[0];
+      };
       router.resetPreviousRoutes = function() {
         return this._prevRoutes = [];
       };
