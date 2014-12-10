@@ -1,7 +1,10 @@
+# appRouter plugin
+
 define [
     "underscore"
     "hasher"
     'when'
+    "meld"
     'wire/lib/object'
     "core/util/navigation/navigate"
     "core/util/navigation/getCurrentCpid"
@@ -10,7 +13,7 @@ define [
     "core/plugin/routing/assets/contextHashController"
     "when/sequence"
     "specs/reporter/spec"
-], (_, hasher, When, object, navigate, getCurrentCpid, navigateToError, appRouterController, contextHashController, sequence, reporterSpec) ->
+], (_, hasher, When, meld, object, navigate, getCurrentCpid, navigateToError, appRouterController, contextHashController, sequence, reporterSpec) ->
 
     return (options) ->
 
@@ -20,20 +23,19 @@ define [
         childRoutes = undefined
         childSpecs = []
 
-        noop = () ->
-
-        errorHandler = (error) ->
-            console.error error.stack
-
+        # appRouterWire: hasherInitializator
         parseHash = (newHash, oldHash) ->
             appRouterController.parse newHash
 
+        # appRouterWire: controller
         getCurrentHash = () ->
             return getCurrentRoute().params.join "/"
 
+        # appRouterWire: controller
         getCurrentRoute = () ->
             return appRouterController.getCurrentRoute()
 
+        # appRouterWire: no need
         isRef = (it) ->
             return it and object.hasOwn(it, '$ref')
 
@@ -45,6 +47,7 @@ define [
             
             throw new Error "Access policy strange way definition - use instead one of the next factories: 'wire', 'create', 'module'"
 
+        # appRouterWire: synchronizeWithRoute
         synchronizeWithRoute = (context) ->
             if context.synchronizeWithRoute?
                     context.synchronizeWithRoute.call context
@@ -79,6 +82,7 @@ define [
             _context = contextHashController.getCachedContext(_currentRoute, childRouteObject.spec)
 
             unless _context
+                console.debug "PREVIOUS CONTEXT SHOULD BE REMOVED?????", _currentRoute.params, contextHashController.getHash()
                 wire.loadModule(childRouteObject.spec)
                     .then (childSpecObj) ->
                         # slot
@@ -90,6 +94,7 @@ define [
                             childSpecObj.options = childRouteObject.options
 
                         # check if access to this component is possible
+                        # appRouterWire: accessPolicyProcessor
                         if childSpecObj.accessPolicy?
                             prospectCTX.wire(normalizeAccessPolicy(childSpecObj.accessPolicy)).then (checkingCTX) ->
                                 if !checkingCTX.accessPolicy.checkAccess()
@@ -104,7 +109,6 @@ define [
                                     prospectContextWireChildObj(prospectCTX, childSpecObj, childRouteObject, wire)
                         else
                             prospectContextWireChildObj(prospectCTX, childSpecObj, childRouteObject, wire)
-
                     .otherwise (err) ->
                         navigateToError('js', err)
 
@@ -122,6 +126,7 @@ define [
 
                 # synchronization with matched route
                 synchronizeWithRoute _context
+                
 
         prospectContextWireChildObj = (prospectCTX, childSpecObj, childRouteObject, wire) ->
             prospectCTX.wire(childSpecObj).then (childCTX) ->
@@ -144,6 +149,7 @@ define [
             childSpecObj.behavior = behavior
             return childSpecObj
 
+        # appRouterWire: behaviorProcessor
         sequenceBehavior = (childCTX, route, wire) ->
             When(wire.getProxy(childCTX.behavior)
                         , (behaviorObj) ->
@@ -156,13 +162,14 @@ define [
                             # nothing to do, no behavior defined
                     )
 
+        # appRouterWire: controller constructor
         routeBinding = (appRouterController, compDef, wire) ->
 
             _currentContext = null
             _currentProspectSpec = undefined
             _cpid = undefined
 
-            for route, routeObject of compDef.options.routes
+            for route, routeObject of compDef.options.groundRoutes
 
                 spec        = routeObject.spec
                 mergeWith   = routeObject.mergeWith
@@ -175,8 +182,10 @@ define [
 
                     if spec != _currentProspectSpec or _cpid != cpid
 
+                        # appRouterWire: contextController destroy context
                         _currentContext?.destroy()
 
+                        # appRouterWire: merging modules process in controller getMergedModulesPromise
                         promisedModules = []
                         specPromise = wire.loadModule(spec)
                         promisedModules.push specPromise
@@ -188,15 +197,16 @@ define [
                             for mergingModule in mergeWith
                                 promisedModules.push wire.loadModule(mergingModule)
 
+                        # appRouterWire: controller loadInEnvironment
                         When.all(promisedModules).then (modulesResult) ->
 
+                            # appRouterWire: controller applyEnvironment
                             modulesResult[0].slot = slot
 
                             rootContext = wire.createChild(modulesResult)
 
                             rootContext.then (prospectCTX) ->
 
-                                # When(prospectCTX.renderingController.isReady()).then () ->
                                 When(prospectCTX).then () ->
                                                 
                                     # set current
@@ -204,6 +214,7 @@ define [
                                     _currentProspectSpec = spec
                                     _cpid = cpid
 
+                                    # appRouterWire: all destroy context logic should be moved to ContextController
                                     contextHashController.resetHash()
 
                                     startChildRouteWiring(prospectCTX, route, wire)
@@ -213,11 +224,13 @@ define [
                         startChildRouteWiring(_currentContext, route, wire)
 
                 ).bind null, spec, mergeWith, slot, route, behavior, wire
-
+                
+                # appRouterWire: Route class (used in controller)
                 oneRoute = appRouterController.addRoute(route)
                 oneRoute.rules = rules
                 oneRoute.matched.add routeFn
 
+        # appRouterWire: all compDef.options provided to spec
         initializeRouter = (resolver, compDef, wire) ->
             if isRef(compDef.options.childRoutes)
                 wire(compDef.options.childRoutes).then (routes) ->
@@ -226,8 +239,9 @@ define [
                     for route, routeObject of routes
                         childSpecs.push routeObject
 
-            if isRef(compDef.options.routeFilterStrategy)
-                wire(compDef.options.routeFilterStrategy).then (strategy) ->
+            # appRouterWire: filterStrategy provided by controller
+            if isRef(compDef.options.filterStrategy)
+                wire(compDef.options.filterStrategy).then (strategy) ->
                     filterStrategy = strategy
             else
                 # TODO: think how to resolve

@@ -11,7 +11,12 @@ define [
             router.bypassed.add (route) ->
                 navigateToError "404", "The page with route #{route} you tried to access does not exist"
 
+            # deprecated?
             router.getCurrentRoute = () ->
+                return @._prevRoutes[0]
+
+            # instead
+            router.getCurrentRouteHash = () ->
                 return @._prevRoutes[0]
 
             router.resetPreviousRoutes = () ->

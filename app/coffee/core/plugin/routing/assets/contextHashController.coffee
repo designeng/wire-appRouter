@@ -13,7 +13,6 @@ define [
         resetHash: ->
             _.each @contextHash, (cpidCasheObject) ->
                 _.each cpidCasheObject, (context) ->
-                    console.debug "remove::::", context
                     context.destroy()
             @contextHash = {}
 
@@ -50,7 +49,7 @@ define [
         removeCachedContext: (route, spec) ->
             cpid        = @getCpid route
             if cpid
-                # @contextHash[cpid][spec].destroy()
+                @contextHash[cpid][spec].destroy()
                 delete @contextHash[cpid][spec]
 
         # context duck-typing
