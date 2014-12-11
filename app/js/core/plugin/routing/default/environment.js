@@ -7,7 +7,7 @@ define(["underscore", "when", "core/util/navigation/navigateToError"], function(
       return this.pluginWireFn.loadModule(moduleId).then(function(resultContext) {
         return resultContext;
       }, function(error) {
-        return navigateToError('js', error);
+        return navigateToError("js", error);
       });
     };
 

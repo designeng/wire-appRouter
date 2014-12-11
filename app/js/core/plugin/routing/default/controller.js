@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "when", "./route"], function(_, When, Route) {
+define(["underscore", "when", "core/util/navigation/navigateToError", "./route"], function(_, When, navigateToError, Route) {
   var Controller;
   return Controller = (function() {
     Controller.prototype.groupsAllowedFields = {
@@ -36,7 +36,7 @@ define(["underscore", "when", "./route"], function(_, When, Route) {
               _this.contextController.setRouteData(child, routeKey);
               return _this.processChildRoute(context, child, routeKey);
             }).otherwise(function(error) {
-              return console.error("ERROR:::", error);
+              return navigateToError("js", error);
             });
           };
         })(routeValue, routeKey);

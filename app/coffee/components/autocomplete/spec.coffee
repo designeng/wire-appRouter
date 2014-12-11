@@ -52,7 +52,6 @@ define ->
         wire: 
             spec: "components/autocomplete/list/collection/spec"
 
-
     input: 
         render:
             template:
@@ -66,4 +65,7 @@ define ->
 
     synchronizeWithRoute: () ->
         return @controller.synchronizeWithRoute()
+
+    accessPolicy:
+        wire: "components/autocomplete/access/spec"
 

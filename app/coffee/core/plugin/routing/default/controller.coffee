@@ -1,8 +1,9 @@
 define [
     "underscore"
     "when"
+    "core/util/navigation/navigateToError"
     "./route"
-], (_, When, Route) ->
+], (_, When, navigateToError, Route) ->
 
     class Controller
 
@@ -35,7 +36,7 @@ define [
 
                             @processChildRoute(context, child, routeKey)
                         .otherwise (error) ->
-                            console.error "ERROR:::", error
+                            navigateToError("js", error)
 
                 # register route
                 new Route(routeKey, routeValue.rules, routeHandler)

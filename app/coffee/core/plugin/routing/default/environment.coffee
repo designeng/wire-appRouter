@@ -10,7 +10,7 @@ define [
             @pluginWireFn.loadModule(moduleId).then (resultContext) ->
                 return resultContext
             , (error) ->
-                navigateToError('js', error)
+                navigateToError("js", error)
 
         # @param {String} specId - the primary target specificationId
         # @param {String | Array} mergeWith - id(s) of merging specification(s)

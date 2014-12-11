@@ -93,6 +93,9 @@ define(function() {
     },
     synchronizeWithRoute: function() {
       return this.controller.synchronizeWithRoute();
+    },
+    accessPolicy: {
+      wire: "components/autocomplete/access/spec"
     }
   };
 });
