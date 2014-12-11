@@ -3,7 +3,7 @@ define ->
     class AccessPolicy
 
         checkAccess: () ->
-            return false
+            return true
 
         getRedirect: () ->
             return "/calendar"
