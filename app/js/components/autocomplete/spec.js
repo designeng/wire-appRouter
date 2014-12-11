@@ -90,6 +90,9 @@ define(function() {
       on: {
         'keyup': 'controller.onTextInputKeyUp'
       }
+    },
+    synchronizeWithRoute: function() {
+      return this.controller.synchronizeWithRoute();
     }
   };
 });

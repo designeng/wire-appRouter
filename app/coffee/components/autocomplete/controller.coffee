@@ -16,6 +16,9 @@ define ->
             #     @listCollection.adapters[1].onAdd = (item) ->
             #         console.log "ADDED", item
             # , 1000)
+
+        synchronizeWithRoute: ->
+            console.debug "synchronizeWithRoute aitocomplete"
             
 
         onItemClick: (item) ->

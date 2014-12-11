@@ -69,9 +69,9 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       if (typeof child.behavior !== "undefined") {
         environment["behavior"] = child.behavior;
       }
-      return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childResultContext) {
-        _this.contextController.registerContext(childResultContext, child.spec, "child");
-        return childResultContext;
+      return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
+        _this.contextController.registerContext(childContext, child.spec, "child");
+        return childContext;
       }, function(rejectReason) {
         return console.debug("rejectReason:::::", rejectReason);
       });
@@ -86,7 +86,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     };
 
     ChildContextProcessor.prototype.synchronize = function(childContext) {
-      if (childContext.synchronizeWithRoute != null) {
+      if (typeof childContext.synchronizeWithRoute !== "undefined") {
         childContext.synchronizeWithRoute.call(childContext);
       }
       return childContext;

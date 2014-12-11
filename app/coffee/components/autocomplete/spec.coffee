@@ -64,3 +64,6 @@ define ->
         on:
             'keyup': 'controller.onTextInputKeyUp'
 
+    synchronizeWithRoute: () ->
+        return @controller.synchronizeWithRoute()
+

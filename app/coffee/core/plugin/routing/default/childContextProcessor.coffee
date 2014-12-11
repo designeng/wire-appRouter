@@ -66,10 +66,10 @@ define [
             if typeof child.behavior != "undefined"
                 environment["behavior"] = child.behavior
 
-            return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childResultContext) =>
+            return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
                 # register context
-                @contextController.registerContext childResultContext, child.spec, "child"
-                return childResultContext
+                @contextController.registerContext childContext, child.spec, "child"
+                return childContext
             , (rejectReason) ->
                 console.debug "rejectReason:::::", rejectReason
 
@@ -80,6 +80,6 @@ define [
                 return childContext
 
         synchronize: (childContext) ->
-            if childContext.synchronizeWithRoute?
+            if typeof childContext.synchronizeWithRoute != "undefined"
                 childContext.synchronizeWithRoute.call childContext
             return childContext
