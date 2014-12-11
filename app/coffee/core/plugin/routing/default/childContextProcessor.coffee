@@ -41,6 +41,7 @@ define [
                 "wireChildContext"
                 "sequenceBehavior"
                 "synchronize"
+                "destroyTest"
             ]
             distributive = @provideFunctions(@distributeTasks(tasks))
             noop = ->
@@ -83,3 +84,8 @@ define [
             if typeof childContext.synchronizeWithRoute != "undefined"
                 childContext.synchronizeWithRoute.call childContext
             return childContext
+
+        destroyTest: (childContext) ->
+            setTimeout () ->
+                childContext.destroy() 
+            , 1000

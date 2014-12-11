@@ -15,3 +15,9 @@ define ->
                 module: "text!components/calendar/template.html"
         insert:
             at: {$ref: 'slot'}
+
+    calendarTitle:
+        wire: 
+            spec: "components/calendar/title/spec"
+            provide:
+                slot: {$ref: "dom.first!#title"}
