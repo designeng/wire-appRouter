@@ -6,6 +6,8 @@ define [
 
     return (options) ->
 
+        pluginContext = null
+
         # @param {Object} compDef.options
         appRouterFactory = (resolver, compDef, wire) ->
             essentialObjects = ["groundRoutes", "childRoutes"]
@@ -27,6 +29,7 @@ define [
                             groundRoutes           : compDef.options.groundRoutes
                             childRoutes            : compDef.options.childRoutes
             }).then (context) ->
+                pluginContext = context
                 resolver.resolve(context)
 
         pluginInstance = 
@@ -34,6 +37,7 @@ define [
                 resolver.resolve()
             destroy: (resolver, proxy, wire) ->
                 appRouterController.dispose()
+                pluginContext.root.contextController.routeObserver.unwatch()
                 resolver.resolve()
 
             factories: 

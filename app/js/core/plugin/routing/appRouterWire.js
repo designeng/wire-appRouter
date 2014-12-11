@@ -1,6 +1,7 @@
 define(["underscore", "core/plugin/routing/default/spec", "core/plugin/routing/assets/appRouterController"], function(_, defaultAppRouter, appRouterController) {
   return function(options) {
-    var appRouterFactory, pluginInstance;
+    var appRouterFactory, pluginContext, pluginInstance;
+    pluginContext = null;
     appRouterFactory = function(resolver, compDef, wire) {
       var essentialObjects, opt, _i, _len;
       essentialObjects = ["groundRoutes", "childRoutes"];
@@ -31,6 +32,7 @@ define(["underscore", "core/plugin/routing/default/spec", "core/plugin/routing/a
           }
         }
       }).then(function(context) {
+        pluginContext = context;
         return resolver.resolve(context);
       });
     };
@@ -40,6 +42,7 @@ define(["underscore", "core/plugin/routing/default/spec", "core/plugin/routing/a
       },
       destroy: function(resolver, proxy, wire) {
         appRouterController.dispose();
+        pluginContext.root.contextController.routeObserver.unwatch();
         return resolver.resolve();
       },
       factories: {
