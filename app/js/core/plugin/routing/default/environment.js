@@ -1,19 +1,27 @@
-define(["underscore", "when"], function(_, When) {
+define(["underscore", "when", "core/util/navigation/navigateToError"], function(_, When, navigateToError) {
   var Environment;
   return Environment = (function() {
     function Environment() {}
 
+    Environment.prototype.loadModule = function(moduleId) {
+      return this.pluginWireFn.loadModule(moduleId).then(function(resultContext) {
+        return resultContext;
+      }, function(error) {
+        return navigateToError('js', error);
+      });
+    };
+
     Environment.prototype.getMergedModulesArrayOfPromises = function(specId, mergeWith) {
       var mergingModule, promisedModules, _i, _len;
       promisedModules = [];
-      promisedModules.push(this.pluginWireFn.loadModule(specId));
+      promisedModules.push(this.loadModule(specId));
       if (mergeWith) {
         if (_.isString(mergeWith)) {
-          promisedModules.push(this.pluginWireFn.loadModule(mergeWith));
+          promisedModules.push(this.loadModule(mergeWith));
         } else if (_.isArray(mergeWith)) {
           for (_i = 0, _len = mergeWith.length; _i < _len; _i++) {
             mergingModule = mergeWith[_i];
-            promisedModules.push(this.pluginWireFn.loadModule(mergingModule));
+            promisedModules.push(this.loadModule(mergingModule));
           }
         } else {
           throw new Error("mergeWith option has unsupported format!");

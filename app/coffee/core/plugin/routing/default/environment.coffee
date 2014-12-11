@@ -1,23 +1,30 @@
 define [
     "underscore"
     "when"
-], (_, When) ->
+    "core/util/navigation/navigateToError"
+], (_, When, navigateToError) ->
 
     class Environment
+
+        loadModule: (moduleId) ->
+            @pluginWireFn.loadModule(moduleId).then (resultContext) ->
+                return resultContext
+            , (error) ->
+                navigateToError('js', error)
 
         # @param {String} specId - the primary target specificationId
         # @param {String | Array} mergeWith - id(s) of merging specification(s)
         # @return {Array of promises}
         getMergedModulesArrayOfPromises: (specId, mergeWith) ->
             promisedModules = []
-            promisedModules.push @pluginWireFn.loadModule(specId)
+            promisedModules.push @loadModule(specId)
             
             if mergeWith
                 if _.isString mergeWith
-                    promisedModules.push @pluginWireFn.loadModule(mergeWith)
+                    promisedModules.push @loadModule(mergeWith)
                 else if _.isArray mergeWith
                     for mergingModule in mergeWith
-                        promisedModules.push @pluginWireFn.loadModule(mergingModule)
+                        promisedModules.push @loadModule(mergingModule)
                 else
                     throw new Error "mergeWith option has unsupported format!"
 
