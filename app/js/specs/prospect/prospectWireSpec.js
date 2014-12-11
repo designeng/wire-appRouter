@@ -29,6 +29,17 @@ define(function() {
               infopart: /\bright\b|\bcenter\b/i
             }
           },
+          "{complexpart}/{infopart}/{id}": {
+            spec: "specs/prospect/complex/spec",
+            slot: {
+              $ref: "dom.first!#prospect"
+            },
+            rules: {
+              complexpart: /\border\b/i,
+              infopart: /\binfo\b/i,
+              id: /[0-9]+/i
+            }
+          },
           "{complexpart}/{infopart}/{id}/{side}": {
             spec: "specs/prospect/complex/spec",
             slot: {

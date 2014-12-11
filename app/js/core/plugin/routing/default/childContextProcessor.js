@@ -1,8 +1,6 @@
 define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
   var ChildContextProcessor;
   return ChildContextProcessor = (function() {
-    var injectBechavior;
-
     ChildContextProcessor.prototype.parentContext = void 0;
 
     function ChildContextProcessor() {
@@ -46,9 +44,6 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       noop = function() {};
       return _.each(bundle, function(item, index) {
         var _this = this;
-        if (index === 1) {
-          delete item.behavior;
-        }
         return pipeline(distributive["filters"], item).then(function(result) {
           return pipeline(distributive["tasks"], result).then(function(res) {
             return noop();
@@ -95,15 +90,6 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         childContext.synchronizeWithRoute.call(childContext);
       }
       return childContext;
-    };
-
-    injectBechavior = function(childSpecObj, behavior) {
-      if (!childSpecObj.$plugins) {
-        childSpecObj.$plugins = [];
-      }
-      childSpecObj.$plugins.push("core/plugin/behavior");
-      childSpecObj.behavior = behavior;
-      return childSpecObj;
     };
 
     return ChildContextProcessor;

@@ -42,6 +42,12 @@ define(function() {
       slot: {
         $ref: "dom.first!#pageCenter"
       }
+    },
+    "order/info/{cpid}": {
+      spec: "components/orderinfo/spec",
+      slot: {
+        $ref: "dom.first!#pageCenter"
+      }
     }
   };
 });

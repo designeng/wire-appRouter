@@ -46,8 +46,6 @@ define [
             noop = ->
 
             _.each bundle, (item, index) ->
-                if index == 1
-                    delete item.behavior
                 pipeline(distributive["filters"], item).then (result) =>
                     pipeline(distributive["tasks"], result).then (res) =>
                         noop()
@@ -85,9 +83,3 @@ define [
             if childContext.synchronizeWithRoute?
                 childContext.synchronizeWithRoute.call childContext
             return childContext
-
-        injectBechavior = (childSpecObj, behavior) ->
-            childSpecObj.$plugins = [] unless childSpecObj.$plugins
-            childSpecObj.$plugins.push "core/plugin/behavior"
-            childSpecObj.behavior = behavior
-            return childSpecObj
