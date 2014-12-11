@@ -39,6 +39,7 @@ define [
             tasks = [
                 "filter:askForAccess"
                 "wireChildContext"
+                "registerContext"
                 "sequenceBehavior"
                 "synchronize"
             ]
@@ -67,11 +68,17 @@ define [
                 environment["behavior"] = child.behavior
 
             return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
-                # register context
-                @contextController.registerContext childContext, child.spec, "child"
-                return childContext
+                return {
+                    childContext
+                    child
+                }
             , (rejectReason) ->
                 console.debug "rejectReason:::::", rejectReason
+
+        registerContext: (args) ->
+            [childContext, child] = _.values args
+            @contextController.registerContext childContext, child.spec, "child"
+            return childContext
 
         sequenceBehavior: (childContext) ->
             if childContext.behavior?

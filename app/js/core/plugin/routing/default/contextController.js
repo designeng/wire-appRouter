@@ -30,7 +30,7 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       };
     };
 
-    ContextController.prototype.getChildRoute = function(route) {
+    ContextController.prototype.getChildRoute = function() {
       return this._currentChildRoute;
     };
 
@@ -39,10 +39,12 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
     };
 
     ContextController.prototype.registerContext = function(context, specId, type) {
+      console.debug("registerContext::::", specId, context);
       return this._contextHash[specId] = context;
     };
 
     ContextController.prototype.getRegistredContext = function(specId) {
+      console.debug("@_contextHash", this._contextHash);
       return this._contextHash[specId];
     };
 

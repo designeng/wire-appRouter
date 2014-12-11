@@ -34,16 +34,18 @@ define [
                 groundRouteKey
             }
 
-        getChildRoute: (route) ->
+        getChildRoute: () ->
             return @_currentChildRoute
 
         contextState: (hash) ->
             console.debug "contextState", hash
 
         registerContext: (context, specId, type) ->
+            console.debug "registerContext::::", specId, context
             @_contextHash[specId] = context
 
         getRegistredContext: (specId) ->
+            console.debug "@_contextHash", @_contextHash
             @_contextHash[specId]
 
         # context duck-typing
