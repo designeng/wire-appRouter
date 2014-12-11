@@ -42,10 +42,8 @@ define [
         # @param {Object} environment - object of fields for result context to be extended with
         # @return {Promise}
         loadInEnvironment: (specId, mergeWith, environment) ->
-            deferred = When.defer()
             promisedModules = @getMergedModulesArrayOfPromises specId, mergeWith
-            When.all(promisedModules).then (modulesResult) =>
+            return When.all(promisedModules).then (modulesResult) =>
                 modulesResult[0] = @applyEnvironment modulesResult[0], environment
                 @pluginWireFn.createChild(modulesResult).then (context) =>
-                    deferred.resolve(context)
-            return deferred.promise
+                    return context

@@ -42,17 +42,15 @@ define(["underscore", "when", "core/util/navigation/navigateToError"], function(
     };
 
     Environment.prototype.loadInEnvironment = function(specId, mergeWith, environment) {
-      var deferred, promisedModules,
+      var promisedModules,
         _this = this;
-      deferred = When.defer();
       promisedModules = this.getMergedModulesArrayOfPromises(specId, mergeWith);
-      When.all(promisedModules).then(function(modulesResult) {
+      return When.all(promisedModules).then(function(modulesResult) {
         modulesResult[0] = _this.applyEnvironment(modulesResult[0], environment);
         return _this.pluginWireFn.createChild(modulesResult).then(function(context) {
-          return deferred.resolve(context);
+          return context;
         });
       });
-      return deferred.promise;
     };
 
     return Environment;
