@@ -180,15 +180,16 @@ define [
         it "process groundRoutes (filterStrategy, contextController.setChildRoute) integration", (done) ->
             When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
                 setHash "order/info/123"
-            .delay(100).then () =>
-                expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
-            .delay(100).then () =>
-                childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec") 
-                expect(childContext.behavior).not.toBeArray()
-                # expect(childContext.behavior[0]).toBeFunction()
-                # console.debug "HASH:::", @ctx.controller.root.contextController.getContextHash()
-                console.debug "PLUGINS", childContext.$plugins
-                done()
+                _.defer () =>
+                    expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
+                    setTimeout () =>
+                        childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec") 
+                        expect(childContext.behavior).not.toBeArray()
+                        # expect(childContext.behavior[0]).toBeFunction()
+                        # console.debug "HASH:::", @ctx.controller.root.contextController.getContextHash()
+                        console.debug "PLUGINS", childContext.$plugins
+                        done()
+                    , 100
                     
 
         # checkForAllowedFields

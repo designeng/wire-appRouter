@@ -39,7 +39,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     ChildContextProcessor.prototype.deliver = function(parentContext, bundle) {
       var distributive, noop, tasks;
       this.parentContext = parentContext;
-      tasks = ["filter:askForAccess", "wireChildContext", "registerContext", "sequenceBehavior", "synchronize"];
+      tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
       distributive = this.provideFunctions(this.distributeTasks(tasks));
       noop = function() {};
       return _.each(bundle, function(item, index) {
@@ -70,20 +70,11 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         environment["behavior"] = child.behavior;
       }
       return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
-        return {
-          childContext: childContext,
-          child: child
-        };
+        _this.contextController.registerContext(childContext, child.spec, "child");
+        return childContext;
       }, function(rejectReason) {
         return console.debug("rejectReason:::::", rejectReason);
       });
-    };
-
-    ChildContextProcessor.prototype.registerContext = function(args) {
-      var child, childContext, _ref;
-      _ref = _.values(args), childContext = _ref[0], child = _ref[1];
-      this.contextController.registerContext(childContext, child.spec, "child");
-      return childContext;
     };
 
     ChildContextProcessor.prototype.sequenceBehavior = function(childContext) {

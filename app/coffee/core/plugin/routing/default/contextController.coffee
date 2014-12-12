@@ -34,7 +34,7 @@ define [
                 groundRouteKey
             }
 
-        getChildRoute: () ->
+        getChildRoute: (route) ->
             return @_currentChildRoute
 
         contextState: (hash) ->

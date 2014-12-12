@@ -4,7 +4,7 @@ define(function() {
     function AccessPolicy() {}
 
     AccessPolicy.prototype.checkAccess = function() {
-      return true;
+      return false;
     };
 
     AccessPolicy.prototype.getRedirect = function() {

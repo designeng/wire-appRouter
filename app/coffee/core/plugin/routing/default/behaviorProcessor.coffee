@@ -15,6 +15,7 @@ define [
                             tasks = [tasks]
                         # @param {Array} tasks - array of tasks
                         # @param {Object} childCTX - current resulted child context
+                        # @param {String} route - current child context route
                         sequence(tasks, childCTX)
                     , () ->
                         # nothing to do, no behavior defined

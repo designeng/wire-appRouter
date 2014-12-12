@@ -30,7 +30,7 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       };
     };
 
-    ContextController.prototype.getChildRoute = function() {
+    ContextController.prototype.getChildRoute = function(route) {
       return this._currentChildRoute;
     };
 

@@ -184,15 +184,17 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
     it("process groundRoutes (filterStrategy, contextController.setChildRoute) integration", function(done) {
       var _this = this;
       return When(this.ctx.controller.root.controller.registerGroundRoutes()).then(function() {
-        return setHash("order/info/123");
-      }).delay(100).then(function() {
-        return expect(_this.ctx.controller.root.contextController.getChildRoute()).toBe("order/info/{cpid}");
-      }).delay(100).then(function() {
-        var childContext;
-        childContext = _this.ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec");
-        expect(childContext.behavior).not.toBeArray();
-        console.debug("PLUGINS", childContext.$plugins);
-        return done();
+        setHash("order/info/123");
+        return _.defer(function() {
+          expect(_this.ctx.controller.root.contextController.getChildRoute()).toBe("order/info/{cpid}");
+          return setTimeout(function() {
+            var childContext;
+            childContext = _this.ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec");
+            expect(childContext.behavior).not.toBeArray();
+            console.debug("PLUGINS", childContext.$plugins);
+            return done();
+          }, 100);
+        });
       });
     });
     it("groundRoutes checkForAllowedFields allowed", function(done) {
