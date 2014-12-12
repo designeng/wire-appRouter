@@ -64,7 +64,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       var environment,
         _this = this;
       environment = {
-        slot: this.parentContext.slot
+        slot: child.slot
       };
       if (typeof child.behavior !== "undefined") {
         environment["behavior"] = child.behavior;

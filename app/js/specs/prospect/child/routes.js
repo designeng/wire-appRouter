@@ -17,6 +17,13 @@ define(function() {
       },
       behavior: {
         $ref: "behavior!doSmth"
+      },
+      relative: "components/simple/spec"
+    },
+    "simple": {
+      spec: "components/simple/spec",
+      slot: {
+        $ref: "dom.first!#simple"
       }
     },
     "search": {

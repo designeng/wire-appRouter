@@ -61,7 +61,9 @@ define [
 
         wireChildContext: (child) ->
             environment = 
-                slot        : @parentContext.slot
+                # slot        : @parentContext.slot
+                # it's better: 
+                slot        : child.slot
 
             if typeof child.behavior != "undefined"
                 environment["behavior"] = child.behavior
