@@ -19,7 +19,7 @@ define [
 
             wire({
                 appRouterController:
-                    create: "core/plugin/routing/assets/appRouterController"
+                    literal: appRouterController
                 root:
                     wire:
                         spec: defaultAppRouter

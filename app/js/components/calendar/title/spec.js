@@ -1,6 +1,6 @@
 define(function() {
   return {
-    $plugins: ['wire/debug', 'wire/on', 'wire/dom', 'wire/dom/render'],
+    $plugins: ['wire/debug', 'wire/on', 'wire/dom', 'wire/dom/render', "core/plugin/experiment"],
     titleView: {
       render: {
         template: {
@@ -11,7 +11,8 @@ define(function() {
         at: {
           $ref: 'slot'
         }
-      }
+      },
+      experiment: {}
     }
   };
 });

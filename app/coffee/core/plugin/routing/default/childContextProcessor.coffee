@@ -41,7 +41,7 @@ define [
                 "wireChildContext"
                 "sequenceBehavior"
                 "synchronize"
-                "destroyTest"
+                # "destroyTest"
             ]
             distributive = @provideFunctions(@distributeTasks(tasks))
             noop = ->

@@ -16,7 +16,7 @@ define(["underscore", "core/plugin/routing/default/spec", "core/plugin/routing/a
       }
       return wire({
         appRouterController: {
-          create: "core/plugin/routing/assets/appRouterController"
+          literal: appRouterController
         },
         root: {
           wire: {

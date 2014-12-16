@@ -5,6 +5,7 @@ define ->
         'wire/on'
         'wire/dom'
         'wire/dom/render'
+        "core/plugin/experiment"
     ]
 
 
@@ -14,3 +15,4 @@ define ->
                 module: "text!components/calendar/title/template.html"
         insert:
             at: {$ref: 'slot'}
+        experiment: {}

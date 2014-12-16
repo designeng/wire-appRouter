@@ -39,7 +39,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     ChildContextProcessor.prototype.deliver = function(parentContext, bundle) {
       var distributive, noop, tasks;
       this.parentContext = parentContext;
-      tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize", "destroyTest"];
+      tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
       distributive = this.provideFunctions(this.distributeTasks(tasks));
       noop = function() {};
       return _.each(bundle, function(item, index) {
