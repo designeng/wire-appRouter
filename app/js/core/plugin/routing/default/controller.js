@@ -35,7 +35,7 @@ define(["underscore", "when", "core/util/navigation/navigateToError", "./route"]
             })).then(function(context) {
               var child;
               child = _this.filterStrategy(_this.childRoutes, routeObject.route, _this.getCurrentRoute());
-              return _this.processChildRoute(context, child, routeObject.route);
+              return _this.processChildRoute(context, child);
             }).otherwise(function(error) {
               return navigateToError("js", error);
             });
@@ -49,7 +49,7 @@ define(["underscore", "when", "core/util/navigation/navigateToError", "./route"]
       return deferred.promise;
     };
 
-    Controller.prototype.processChildRoute = function(context, child, routeKey) {
+    Controller.prototype.processChildRoute = function(context, child) {
       var bundle, relative;
       bundle = [];
       bundle.push(child);

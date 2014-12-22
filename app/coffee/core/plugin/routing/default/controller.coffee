@@ -31,7 +31,7 @@ define [
                     return () =>
                         When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (context) =>
                             child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
-                            @processChildRoute(context, child, routeObject.route)
+                            @processChildRoute(context, child)
                         .otherwise (error) ->
                             navigateToError("js", error)
 
@@ -45,7 +45,7 @@ define [
         # should be choosed from @childRoutes by filterStrategy in routeHandler
         # @param {WireContext} context
         # @param {WireContext} child - object form childRoutes, choosed by filterStrategy
-        processChildRoute: (context, child, routeKey) ->
+        processChildRoute: (context, child) ->
             bundle = []
             bundle.push child
 
