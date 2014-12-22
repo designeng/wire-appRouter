@@ -17,14 +17,6 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       });
     };
 
-    ContextController.prototype.setRouteData = function(child, groundRouteKey) {
-      this.routeObserver.update(child, groundRouteKey);
-      return {
-        child: child,
-        groundRouteKey: groundRouteKey
-      };
-    };
-
     ContextController.prototype.contextState = function(hash) {
       return console.debug("contextState", hash);
     };

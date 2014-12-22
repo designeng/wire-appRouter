@@ -21,13 +21,6 @@ define [
                 if event is "shift"
                     console.debug "window.location.hash:::", window.location.hash
 
-        setRouteData: (child, groundRouteKey) ->
-            @routeObserver.update child, groundRouteKey
-            return {
-                child
-                groundRouteKey
-            }
-
         contextState: (hash) ->
             console.debug "contextState", hash
 
