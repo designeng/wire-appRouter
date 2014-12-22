@@ -69,7 +69,7 @@ define [
 
             return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
                 # register context
-                @contextController.registerContext childContext, child.spec, "child"
+                @contextController.register "child", childContext, child
                 return childContext
             , (rejectReason) ->
                 console.debug "rejectReason:::::", rejectReason

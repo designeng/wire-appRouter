@@ -38,8 +38,8 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       return console.debug("contextState", hash);
     };
 
-    ContextController.prototype.registerContext = function(context, specId, type) {
-      return this._contextHash[specId] = context;
+    ContextController.prototype.register = function(type, context, routeObject) {
+      return this._contextHash[routeObject.spec] = context;
     };
 
     ContextController.prototype.getRegistredContext = function(specId) {

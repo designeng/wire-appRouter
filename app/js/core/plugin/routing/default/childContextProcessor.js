@@ -70,7 +70,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         environment["behavior"] = child.behavior;
       }
       return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
-        _this.contextController.registerContext(childContext, child.spec, "child");
+        _this.contextController.register("child", childContext, child);
         return childContext;
       }, function(rejectReason) {
         return console.debug("rejectReason:::::", rejectReason);

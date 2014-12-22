@@ -23,23 +23,24 @@ define(["underscore", "when", "core/util/navigation/navigateToError", "./route"]
       i = 0;
       size = _.size(this.groundRoutes);
       _.forEach(this.groundRoutes, function(routeValue, routeKey) {
-        var routeHandler;
+        var routeHandler, routeObject;
         i++;
-        routeHandler = (function(routeValue, routeKey) {
+        routeObject = _.extend({}, routeValue, {
+          route: routeKey
+        });
+        routeHandler = (function(routeObject) {
           return function() {
-            return When(_this.environment.loadInEnvironment(routeValue.spec, routeValue.mergeWith, {
-              slot: routeValue.slot
+            return When(_this.environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {
+              slot: routeObject.slot
             })).then(function(context) {
               var child;
-              child = _this.filterStrategy(_this.childRoutes, routeKey, _this.getCurrentRoute());
-              _this.contextController.registerContext(context, routeValue.spec, "ground");
-              _this.contextController.setRouteData(child, routeKey);
-              return _this.processChildRoute(context, child, routeKey);
+              child = _this.filterStrategy(_this.childRoutes, routeObject.route, _this.getCurrentRoute());
+              return _this.processChildRoute(context, child, routeObject.route);
             }).otherwise(function(error) {
               return navigateToError("js", error);
             });
           };
-        })(routeValue, routeKey);
+        })(routeObject);
         new Route(routeKey, routeValue.rules, routeHandler);
         if (i === size) {
           return deferred.resolve();

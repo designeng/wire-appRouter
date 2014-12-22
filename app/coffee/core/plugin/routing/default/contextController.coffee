@@ -40,8 +40,12 @@ define [
         contextState: (hash) ->
             console.debug "contextState", hash
 
-        registerContext: (context, specId, type) ->
-            @_contextHash[specId] = context
+        # registration order:
+        # 1. current hash
+        # 2. type ("ground" / "child")
+        register: (type, context, routeObject) ->
+
+            @_contextHash[routeObject.spec] = context
 
         getRegistredContext: (specId) ->
             @_contextHash[specId]

@@ -122,7 +122,6 @@ define [
             appRouter:
                 groundRoutes                        : groundRoutes
                 childRoutes                         : childRoutes
-                groundContextResetRoutePositions    : [2]
 
     describe "appRouterWire plugin, controller", ->
 
@@ -148,8 +147,8 @@ define [
             When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
                 setHash "order/info/123"
             .delay(100).then () =>
-                expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
-                childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec")
+                # expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
+                childContext = @ctx.controller.root.contextController.getRegistredContext("child", "order/info/123", "orderInfoComponentSpec")
                 console.debug "childContext:::", childContext
                 expect(childContext.behavior).toBeArray()
                 expect(childContext.behavior[0]).toBeFunction()

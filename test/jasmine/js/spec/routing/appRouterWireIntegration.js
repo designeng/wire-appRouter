@@ -132,8 +132,7 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
     controller: {
       appRouter: {
         groundRoutes: groundRoutes,
-        childRoutes: childRoutes,
-        groundContextResetRoutePositions: [2]
+        childRoutes: childRoutes
       }
     }
   };
@@ -153,8 +152,7 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
         return setHash("order/info/123");
       }).delay(100).then(function() {
         var childContext;
-        expect(_this.ctx.controller.root.contextController.getChildRoute()).toBe("order/info/{cpid}");
-        childContext = _this.ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec");
+        childContext = _this.ctx.controller.root.contextController.getRegistredContext("child", "order/info/123", "orderInfoComponentSpec");
         console.debug("childContext:::", childContext);
         expect(childContext.behavior).toBeArray();
         expect(childContext.behavior[0]).toBeFunction();
