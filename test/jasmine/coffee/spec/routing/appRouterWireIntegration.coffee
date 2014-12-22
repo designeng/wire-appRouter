@@ -103,7 +103,7 @@ define [
             spec: "orderInfoComponentSpec"
             slot: "slot"
             # behavior: {$ref: "behavior!oneBehaviorHandler,secondBehaviorHandler"}
-            behavior: oneBehaviorHandler
+            behavior: [oneBehaviorHandler, secondBehaviorHandler]
             relative: "relativeSpec"
             contextResetRoutePositions: [2]
 
@@ -123,39 +123,6 @@ define [
                 groundRoutes                        : groundRoutes
                 childRoutes                         : childRoutes
                 groundContextResetRoutePositions    : [2]
-
-    describe "appRouterWire plugin, controller.root fields", ->
-
-        beforeEach (done) ->
-            wire(appRouterWireSpec).then (@ctx) =>
-                done()
-            .otherwise (err) ->
-                console.log "ERROR", err
-
-        # provided
-        it "groundRoutes, childRoutes object exist", (done) ->
-            expect(@ctx.controller.root.groundRoutes).toBeDefined()
-            expect(@ctx.controller.root.groundRoutes).toBeObject()
-            expect(@ctx.controller.root.childRoutes).toBeDefined()
-            expect(@ctx.controller.root.childRoutes).toBeObject()
-            done()
-
-        # own properties
-        it "behaviorProcessor", (done) ->
-            expect(@ctx.controller.root.behaviorProcessor).toBeDefined()
-            done()
-
-        it "accessPolicyProcessor", (done) ->
-            expect(@ctx.controller.root.accessPolicyProcessor).toBeDefined()
-            done()
-
-        it "hasherInitializator", (done) ->
-            expect(@ctx.controller.root.hasherInitializator).toBeDefined()
-            done()
-
-        it "filterStrategy", (done) ->
-            expect(@ctx.controller.root.filterStrategy).toBeDefined()
-            done()
 
     describe "appRouterWire plugin, controller", ->
 
@@ -180,69 +147,10 @@ define [
         it "process groundRoutes (filterStrategy, contextController.setChildRoute) integration", (done) ->
             When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
                 setHash "order/info/123"
-                _.defer () =>
-                    setTimeout () =>
-                        console.debug "--------------------------------"
-                        expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
-                        childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec") 
-                        # expect(childContext.behavior).not.toBeArray()
-                        # expect(childContext.behavior[0]).toBeFunction()
-                        # console.debug "HASH:::", @ctx.controller.root.contextController.getContextHash()
-                        done()
-                    , 300
-                    
-
-        # checkForAllowedFields
-        it "groundRoutes checkForAllowedFields allowed", (done) ->
-            route = groundRoutes["validRoute"]
-            expect(@ctx.controller.root.controller.checkForAllowedFields(route, "ground")).toBe true
-            done()
-
-        it "groundRoutes checkForAllowedFields not allowed", (done) ->
-            route = groundRoutes["notValidRoute"]
-            expect(@ctx.controller.root.controller.checkForAllowedFields(route, "ground")).toBe false
-            done()
-
-    describe "appRouterWire plugin, environment", ->
-
-        beforeEach (done) ->
-            wire(appRouterWireSpec).then (@ctx) =>
+            .delay(100).then () =>
+                expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
+                childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec")
+                console.debug "childContext:::", childContext
+                expect(childContext.behavior).toBeArray()
+                expect(childContext.behavior[0]).toBeFunction()
                 done()
-            .otherwise (err) ->
-                console.log "ERROR", err
-
-        it "getMergedModulesArrayOfPromises", (done) ->
-            array = @ctx.controller.root.environment.getMergedModulesArrayOfPromises("oneSpec", ["secondSpec", "thirdSpec"])
-            expect(array).toBeArray()
-            for item in array
-                expect(item).toBePromise()
-            done()
-
-        it "applyEnvironment", (done) ->
-            object = @ctx.controller.root.environment.applyEnvironment({}, {slot: "123"})
-            expect(object["slot"]).toBe "123"
-            done()
-
-        it "getMergedModulesPromise result should has named field", (done) ->
-            When(@ctx.controller.root.environment.loadInEnvironment("oneSpec", ["secondSpec", "thirdSpec"], {superSlot: "123"})).then (resultContext) ->
-                expect(resultContext).toHaveField("superSlot")
-                done()
-
-    describe "appRouterWire plugin, environment", ->
-
-        beforeEach (done) ->
-            wire(appRouterWireSpec).then (@ctx) =>
-                done()
-            .otherwise (err) ->
-                console.log "ERROR", err
-
-        # PASSED
-        # it "getContextResetRoutePositions", (done) ->
-        #     expect(@ctx.controller.root.contextController.getContextResetRoutePositions("order/info/{cpid}/payment/{paymentId}")).toEqual [2,4]
-        #     done()
-
-        # TODO: bind routes first in before each!
-        # it "setRouteModel", (done) ->
-        #     setHash "validRoute"
-        #     @ctx.controller.root.contextController.setRouteModel()
-        #     done()

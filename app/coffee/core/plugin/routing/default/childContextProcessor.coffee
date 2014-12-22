@@ -45,6 +45,7 @@ define [
             distributive = @provideFunctions(@distributeTasks(tasks))
             noop = ->
 
+            # if any filter return false, no tasks processing
             _.each bundle, (item, index) ->
                 pipeline(distributive["filters"], item).then (result) =>
                     pipeline(distributive["tasks"], result).then (res) =>
