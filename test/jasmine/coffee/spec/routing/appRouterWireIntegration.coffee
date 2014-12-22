@@ -131,24 +131,12 @@ define [
             .otherwise (err) ->
                 console.log "ERROR", err
 
-        # PASSED
-        # it "process groundRoutes (filterStrategy, contextController.setChildRoute) integration", (done) ->
-        #     When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
-        #         spyOn(@ctx.controller.root.contextController, "getContextResetRoutePositions")
-        #         setHash "order/info/123"
-
-        #         _.defer () =>
-        #             expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
-        #             # getContextResetRoutePositions expect to be called after setChildRoute
-        #             expect(@ctx.controller.root.contextController.getContextResetRoutePositions).toHaveBeenCalledWith "order/info/{cpid}"
-        #             done()
-
         it "process groundRoutes (filterStrategy, contextController.setChildRoute) integration", (done) ->
             When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
                 setHash "order/info/123"
             .delay(100).then () =>
                 # expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
-                childContext = @ctx.controller.root.contextController.getRegistredContext("child", "order/info/123", "orderInfoComponentSpec")
+                childContext = @ctx.controller.root.contextController.getRegistredContext("order/info/{cpid}").childContext
                 console.debug "childContext:::", childContext
                 expect(childContext.behavior).toBeArray()
                 expect(childContext.behavior[0]).toBeFunction()

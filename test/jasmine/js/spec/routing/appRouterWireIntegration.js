@@ -152,7 +152,7 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
         return setHash("order/info/123");
       }).delay(100).then(function() {
         var childContext;
-        childContext = _this.ctx.controller.root.contextController.getRegistredContext("child", "order/info/123", "orderInfoComponentSpec");
+        childContext = _this.ctx.controller.root.contextController.getRegistredContext("order/info/{cpid}").childContext;
         console.debug("childContext:::", childContext);
         expect(childContext.behavior).toBeArray();
         expect(childContext.behavior[0]).toBeFunction();

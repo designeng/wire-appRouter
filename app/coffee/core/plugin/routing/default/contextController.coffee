@@ -8,11 +8,6 @@ define [
 
     class ContextController
 
-        _currentRoute: undefined
-
-        # {String} - e.g.: "order/info/{cpid}"
-        _currentChildRoute: undefined
-
         # routeObserver is watching for @setRouteData invocations, analizing it's return
         # and desides basicly on provided data to reload context, load it from cache, or other.
         routeObserver: null
@@ -21,34 +16,34 @@ define [
 
         onReady: ->
             @routeObserver = new RouteObserver()
-            @routeObserver.watch @setRouteData
+            @routeObserver.watch @register
             @routeObserver.getSignal().add (event, entity) ->
                 if event is "shift"
                     console.debug "window.location.hash:::", window.location.hash
 
         setRouteData: (child, groundRouteKey) ->
             @routeObserver.update child, groundRouteKey
-            @_currentChildRoute = child.route
             return {
                 child
                 groundRouteKey
             }
 
-        getChildRoute: (route) ->
-            return @_currentChildRoute
-
         contextState: (hash) ->
             console.debug "contextState", hash
 
-        # registration order:
-        # 1. current hash
-        # 2. type ("ground" / "child")
-        register: (type, context, routeObject) ->
+        register: (parentContext, childContext, child) ->
+            # registration enter point (key): child.route
+            @_contextHash[child.route] = {
+                parentContext   : parentContext
+                childContext    : childContext
+            }
 
-            @_contextHash[routeObject.spec] = context
+            return {
+                child
+            }
 
-        getRegistredContext: (specId) ->
-            @_contextHash[specId]
+        getRegistredContext: (route) ->
+            @_contextHash[route]
 
         # context duck-typing
         ensureContext: (context) ->

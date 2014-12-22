@@ -9,7 +9,7 @@ define [
         removers: []
 
         currentParams: []
-        currentGroundRouteKey: undefined
+
         currentChildRouteKey: undefined
 
         constructor: () ->
@@ -86,7 +86,7 @@ define [
         changesOccurred: (mutations, positions) ->
             return !!_.intersection(mutations, positions).length
 
-        update: (child, groundRouteKey) ->
+        update: (child) ->
             positions = @calculatePositions child
 
             # it should be always different, checking is not needed in general
@@ -98,6 +98,5 @@ define [
                     @_signal.dispatch("shift", "ground")
 
             # finally
-            @currentGroundRouteKey = groundRouteKey
             @currentChildRouteKey = child.route
             @currentParams = child.params
