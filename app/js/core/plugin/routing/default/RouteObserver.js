@@ -7,8 +7,6 @@ define(["underscore", "meld", "signals"], function(_, meld, Signal) {
 
     RouteObserver.prototype.currentParams = [];
 
-    RouteObserver.prototype.currentGroundRouteKey = void 0;
-
     RouteObserver.prototype.currentChildRouteKey = void 0;
 
     function RouteObserver() {
@@ -93,7 +91,7 @@ define(["underscore", "meld", "signals"], function(_, meld, Signal) {
       return !!_.intersection(mutations, positions).length;
     };
 
-    RouteObserver.prototype.update = function(child, groundRouteKey) {
+    RouteObserver.prototype.update = function(child) {
       var mutations, positions;
       positions = this.calculatePositions(child);
       if (!this.theSame(child.params, this.currentParams)) {
@@ -103,7 +101,6 @@ define(["underscore", "meld", "signals"], function(_, meld, Signal) {
           this._signal.dispatch("shift", "ground");
         }
       }
-      this.currentGroundRouteKey = groundRouteKey;
       this.currentChildRouteKey = child.route;
       return this.currentParams = child.params;
     };

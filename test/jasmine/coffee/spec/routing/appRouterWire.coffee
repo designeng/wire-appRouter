@@ -181,15 +181,15 @@ define [
             When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
                 setHash "order/info/123"
                 _.defer () =>
-                    expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
                     setTimeout () =>
+                        console.debug "--------------------------------"
+                        expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
                         childContext = @ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec") 
-                        expect(childContext.behavior).not.toBeArray()
+                        # expect(childContext.behavior).not.toBeArray()
                         # expect(childContext.behavior[0]).toBeFunction()
                         # console.debug "HASH:::", @ctx.controller.root.contextController.getContextHash()
-                        console.debug "PLUGINS", childContext.$plugins
                         done()
-                    , 100
+                    , 300
                     
 
         # checkForAllowedFields

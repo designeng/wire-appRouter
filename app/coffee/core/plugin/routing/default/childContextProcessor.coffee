@@ -46,6 +46,7 @@ define [
             distributive = @provideFunctions(@distributeTasks(tasks))
             noop = ->
 
+            # if any filter return false, no tasks processing
             _.each bundle, (item, index) ->
                 pipeline(distributive["filters"], item).then (result) =>
                     pipeline(distributive["tasks"], result).then (res) =>
@@ -69,7 +70,7 @@ define [
 
             return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
                 # register context
-                @contextController.registerContext childContext, child.spec, "child"
+                @contextController.register @parentContext, childContext, child
                 return childContext
             , (rejectReason) ->
                 console.debug "rejectReason:::::", rejectReason

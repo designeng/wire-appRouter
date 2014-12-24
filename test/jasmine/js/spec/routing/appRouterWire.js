@@ -186,14 +186,13 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
       return When(this.ctx.controller.root.controller.registerGroundRoutes()).then(function() {
         setHash("order/info/123");
         return _.defer(function() {
-          expect(_this.ctx.controller.root.contextController.getChildRoute()).toBe("order/info/{cpid}");
           return setTimeout(function() {
             var childContext;
+            console.debug("--------------------------------");
+            expect(_this.ctx.controller.root.contextController.getChildRoute()).toBe("order/info/{cpid}");
             childContext = _this.ctx.controller.root.contextController.getRegistredContext("orderInfoComponentSpec");
-            expect(childContext.behavior).not.toBeArray();
-            console.debug("PLUGINS", childContext.$plugins);
             return done();
-          }, 100);
+          }, 300);
         });
       });
     });

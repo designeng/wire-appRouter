@@ -1,4 +1,4 @@
 define(function() {
   var specs;
-  return specs = ["routing/appRouterWire"];
+  return specs = ["routing/appRouterWireIntegration"];
 });

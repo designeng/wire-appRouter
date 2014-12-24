@@ -25,16 +25,13 @@ define [
             _.forEach @groundRoutes, (routeValue, routeKey) =>
                 i++
 
-                routeHandler = do (routeValue = routeValue, routeKey = routeKey) =>
+                routeObject = _.extend {}, routeValue, {route: routeKey}
+
+                routeHandler = do (routeObject = routeObject) =>
                     return () =>
-                        When(@environment.loadInEnvironment(routeValue.spec, routeValue.mergeWith, {slot: routeValue.slot})).then (context) =>
-
-                            child = @filterStrategy(@childRoutes, routeKey, @getCurrentRoute())
-                            
-                            @contextController.registerContext context, routeValue.spec, "ground"
-                            @contextController.setRouteData(child, routeKey)
-
-                            @processChildRoute(context, child, routeKey)
+                        When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (context) =>
+                            child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
+                            @processChildRoute(context, child)
                         .otherwise (error) ->
                             navigateToError("js", error)
 
@@ -48,7 +45,7 @@ define [
         # should be choosed from @childRoutes by filterStrategy in routeHandler
         # @param {WireContext} context
         # @param {WireContext} child - object form childRoutes, choosed by filterStrategy
-        processChildRoute: (context, child, routeKey) ->
+        processChildRoute: (context, child) ->
             bundle = []
             bundle.push child
 
