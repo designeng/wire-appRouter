@@ -2,4 +2,4 @@ define [
 ], () -> 
 
     navigateToError = (type, text)->
-        console.error text
+        console.error text.stack

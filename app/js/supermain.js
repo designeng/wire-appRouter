@@ -69,6 +69,10 @@ require.config({
       name: "domReady",
       main: "domReady",
       location: "../../bower_components/requirejs-domready"
+    }, {
+      name: "stackTrace",
+      main: "stacktrace",
+      location: "../../bower_components/stacktrace-js/dist"
     }
   ],
   shim: {
