@@ -4,7 +4,7 @@ define(["when", "core/util/navigation/navigateToError", "./tasksFactory"], funct
     function RouteHandlerFactory() {
       var tasks;
       _.bindAll(this);
-      tasks = ["before:defineChildObject", "filter:getCached", "loadNotCached"];
+      tasks = ["before:defineChildObject", "filter:getCached", "loadNotCached", "after:sequenceBehavior"];
       this.tasksFactory = new TasksFactory(this, tasks);
     }
 
@@ -31,11 +31,15 @@ define(["when", "core/util/navigation/navigateToError", "./tasksFactory"], funct
     };
 
     RouteHandlerFactory.prototype.loadNotCached = function(routeObject) {
-      var _this = this;
-      return When(this.environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {
-        slot: routeObject.slot
-      })).then(function(parentContext) {
-        return _this.processChildRoute(parentContext, _this.child);
+      var env,
+        _this = this;
+      env = {
+        slot: routeObject.slot,
+        behavior: routeObject.behavior
+      };
+      return When(this.environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, env)).then(function(parentContext) {
+        _this.processChildRoute(parentContext, _this.child);
+        return parentContext;
       }).otherwise(function(error) {
         return navigateToError("js", error);
       });
@@ -52,6 +56,14 @@ define(["when", "core/util/navigation/navigateToError", "./tasksFactory"], funct
         bundle.push(relative);
       }
       return this.childContextProcessor.deliver(context, bundle);
+    };
+
+    RouteHandlerFactory.prototype.sequenceBehavior = function(context) {
+      if (context.behavior != null) {
+        return this.behaviorProcessor.sequenceBehavior(context);
+      } else {
+        return context;
+      }
     };
 
     RouteHandlerFactory.prototype.getCurrentRoute = function() {

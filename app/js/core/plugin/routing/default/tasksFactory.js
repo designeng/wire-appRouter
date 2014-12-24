@@ -11,8 +11,9 @@ define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, Whe
     }
 
     TasksFactory.prototype.prepareTasks = function(tasks) {
-      var beforeRegExp, distributive, filterRegExp, _befores, _filters;
+      var afterRegExp, beforeRegExp, distributive, filterRegExp, _afters, _befores, _filters;
       beforeRegExp = /before:/g;
+      afterRegExp = /after:/g;
       filterRegExp = /filter:/g;
       distributive = {};
       _befores = _.filter(tasks, function(item) {
@@ -29,13 +30,23 @@ define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, Whe
           return false;
         }
       });
+      _afters = _.filter(tasks, function(item) {
+        if (item.match(afterRegExp)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
       distributive["befores"] = _.map(_befores, function(item) {
         return item.split(":")[1];
       });
       distributive["filters"] = _.map(_filters, function(item) {
         return item.split(":")[1];
       });
-      distributive["tasks"] = _.difference(tasks, _filters, _befores);
+      distributive["afters"] = _.map(_afters, function(item) {
+        return item.split(":")[1];
+      });
+      distributive["tasks"] = _.difference(tasks, _filters, _befores, _afters);
       return distributive;
     };
 
@@ -55,20 +66,28 @@ define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, Whe
     };
 
     TasksFactory.prototype.runTasks = function(item, callback) {
-      var _this = this;
+      var deferred,
+        _this = this;
       if (!_.isFunction(callback)) {
         callback = this.noop;
       }
-      return sequence(this.distributive["befores"], item).then(function() {
+      deferred = When.defer();
+      sequence(this.distributive["befores"], item).then(function() {
         return pipeline(_this.distributive["filters"], item).then(function(result1) {
           return pipeline(_this.distributive["tasks"], result1).then(function(result2) {
+            deferred.resolve(result2);
             return callback(result2);
           }, function(err) {
             return console.error("PIPELINE TASKS ERR:::", err);
           });
         }, function(reason) {
+          deferred.resolve(false);
           return console.debug("PIPELINE FILTERS ERR:::", reason);
         });
+      });
+      return When(deferred.promise).then(function(resultContext) {
+        console.debug("res::::", resultContext);
+        return sequence(_this.distributive["afters"], resultContext);
       });
     };
 

@@ -11,8 +11,14 @@ define [
         sendMessage         : (str) ->
             console.debug "MESSAGE:::"
 
-        doSmth				: () ->
-        	console.debug "DO SOMETHING"
+        doSmth              : () ->
+            console.debug "DO SOMETHING!!!!!!!!!!!!!!!!!!!!"
+
+        autocompleteFn      : () ->
+            console.debug "autocompleteFn"
+
+        calendarFn          : () ->
+            console.debug "calendarFn"
     }
 
     return index

@@ -54,6 +54,7 @@ define
             contextController           : {$ref: 'contextController'}
             filterStrategy              : {$ref: 'filterStrategy'}
             childContextProcessor       : {$ref: 'childContextProcessor'}
+            behaviorProcessor           : {$ref: 'behaviorProcessor'}
             environment                 : {$ref: 'environment'}
             # provided by plugin options:
             groundRoutes                : {$ref: 'groundRoutes'}

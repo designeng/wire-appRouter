@@ -12,6 +12,7 @@ define [
                 "before:defineChildObject"
                 "filter:getCached"
                 "loadNotCached"
+                "after:sequenceBehavior"
             ]
             @tasksFactory = new TasksFactory(@, tasks)
 
@@ -36,8 +37,10 @@ define [
             return deferred.promise
 
         loadNotCached: (routeObject) ->
-            When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (parentContext) =>
+            env = {slot: routeObject.slot, behavior: routeObject.behavior}
+            When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, env)).then (parentContext) =>
                 @processChildRoute(parentContext, @child)
+                return parentContext
             .otherwise (error) ->
                 navigateToError("js", error)
 
@@ -54,6 +57,12 @@ define [
                 bundle.push relative
 
             @childContextProcessor.deliver(context, bundle)
+
+        sequenceBehavior: (context) ->
+            if context.behavior?
+                return @behaviorProcessor.sequenceBehavior(context)
+            else
+                return context
 
         # util methods
         getCurrentRoute: () ->

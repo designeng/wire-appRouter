@@ -55,7 +55,6 @@ define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, Wh
     };
 
     ChildContextProcessor.prototype.sequenceBehavior = function(childContext) {
-      console.debug("sequenceBehavior", childContext);
       if (childContext.behavior != null) {
         return this.behaviorProcessor.sequenceBehavior(childContext);
       } else {

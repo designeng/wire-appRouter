@@ -5,12 +5,12 @@ define ->
         "autocomplete"  :   
             spec: "components/autocomplete/spec"
             slot: {$ref: "dom.first!#page"}
-            behavior: {$ref: "behavior!sendMessage"}
+            behavior: {$ref: "behavior!autocompleteFn"}
 
         "calendar"  :  
             spec: "components/calendar/spec"
             slot: {$ref: "dom.first!#page"}
-            behavior: {$ref: "behavior!doSmth"}
+            behavior: {$ref: "behavior!calendarFn"}
             relative: "components/simple/spec"
 
         "simple"    :

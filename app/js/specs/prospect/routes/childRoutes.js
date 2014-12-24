@@ -7,7 +7,7 @@ define(function() {
         $ref: "dom.first!#page"
       },
       behavior: {
-        $ref: "behavior!sendMessage"
+        $ref: "behavior!autocompleteFn"
       }
     },
     "calendar": {
@@ -16,7 +16,7 @@ define(function() {
         $ref: "dom.first!#page"
       },
       behavior: {
-        $ref: "behavior!doSmth"
+        $ref: "behavior!calendarFn"
       },
       relative: "components/simple/spec"
     },

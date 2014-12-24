@@ -8,7 +8,13 @@ define(['behavior/prospect/shift'], function(shift) {
       return console.debug("MESSAGE:::");
     },
     doSmth: function() {
-      return console.debug("DO SOMETHING");
+      return console.debug("DO SOMETHING!!!!!!!!!!!!!!!!!!!!");
+    },
+    autocompleteFn: function() {
+      return console.debug("autocompleteFn");
+    },
+    calendarFn: function() {
+      return console.debug("calendarFn");
     }
   };
   return index;

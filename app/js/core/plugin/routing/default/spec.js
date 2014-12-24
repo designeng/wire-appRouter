@@ -84,6 +84,9 @@ define({
       childContextProcessor: {
         $ref: 'childContextProcessor'
       },
+      behaviorProcessor: {
+        $ref: 'behaviorProcessor'
+      },
       environment: {
         $ref: 'environment'
       },

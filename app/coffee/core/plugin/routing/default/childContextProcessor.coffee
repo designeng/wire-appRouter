@@ -62,7 +62,6 @@ define [
                     console.debug "ChildContextProcessor::wireChildContext:rejectReason:", rejectReason
 
         sequenceBehavior: (childContext) ->
-            console.debug "sequenceBehavior", childContext
             if childContext.behavior?
                 return @behaviorProcessor.sequenceBehavior(childContext)
             else
