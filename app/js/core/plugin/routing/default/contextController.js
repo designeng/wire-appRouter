@@ -17,9 +17,7 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       });
     };
 
-    ContextController.prototype.contextState = function(hash) {
-      return console.debug("contextState", hash);
-    };
+    ContextController.prototype.contextState = function(hash) {};
 
     ContextController.prototype.register = function(parentContext, childContext, child) {
       this._contextHash[child.route] = {

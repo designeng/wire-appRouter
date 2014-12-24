@@ -61,6 +61,5 @@ define [
                 _.each object, (value, key) =>
                     throw new Error "Not allowed field: '#{key}'" unless key in @groupsAllowedFields[routeGroupName]
             catch e
-                # console.error e
                 return false
             return true

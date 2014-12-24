@@ -22,7 +22,6 @@ define [
                     console.debug "window.location.hash:::", window.location.hash
 
         contextState: (hash) ->
-            console.debug "contextState", hash
 
         register: (parentContext, childContext, child) ->
             # registration enter point (key): child.route
@@ -36,8 +35,9 @@ define [
             }
 
         getRegistredContext: (route) ->
-            @_contextHash[route]
+            return @_contextHash[route]
 
+        # TODO: remove if not used 
         # context duck-typing
         ensureContext: (context) ->
             if context.destroy and context.resolve and context.wire

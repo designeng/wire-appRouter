@@ -44,6 +44,7 @@ define [
         loadInEnvironment: (specId, mergeWith, environment) ->
             promisedModules = @getMergedModulesArrayOfPromises specId, mergeWith
             return When.all(promisedModules).then (modulesResult) =>
+                # 0 item is leftmost; left is win in merging; so to set environment to [0] is enough
                 modulesResult[0] = @applyEnvironment modulesResult[0], environment
                 @pluginWireFn.createChild(modulesResult).then (context) =>
                     return context

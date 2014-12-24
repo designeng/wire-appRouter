@@ -62,18 +62,24 @@ define [
             return @accessPolicyProcessor.askForAccess(child)
 
         wireChildContext: (child) ->
-            environment = 
-                slot        : child.slot
+            registred = @contextController.getRegistredContext(child.route)
 
-            if typeof child.behavior != "undefined"
-                environment["behavior"] = child.behavior
-
-            return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
-                # register context
-                @contextController.register @parentContext, childContext, child
+            if registred?
+                childContext = registred.childContext
                 return childContext
-            , (rejectReason) ->
-                console.debug "rejectReason:::::", rejectReason
+            else
+                environment = 
+                    slot        : child.slot
+
+                if typeof child.behavior != "undefined"
+                    environment["behavior"] = child.behavior
+
+                return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
+                    # register context
+                    @contextController.register @parentContext, childContext, child
+                    return childContext
+                , (rejectReason) ->
+                    console.debug "rejectReason:::::", rejectReason
 
         sequenceBehavior: (childContext) ->
             if childContext.behavior?

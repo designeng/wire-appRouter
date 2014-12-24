@@ -61,20 +61,26 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     };
 
     ChildContextProcessor.prototype.wireChildContext = function(child) {
-      var environment,
+      var childContext, environment, registred,
         _this = this;
-      environment = {
-        slot: child.slot
-      };
-      if (typeof child.behavior !== "undefined") {
-        environment["behavior"] = child.behavior;
-      }
-      return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
-        _this.contextController.register(_this.parentContext, childContext, child);
+      registred = this.contextController.getRegistredContext(child.route);
+      if (registred != null) {
+        childContext = registred.childContext;
         return childContext;
-      }, function(rejectReason) {
-        return console.debug("rejectReason:::::", rejectReason);
-      });
+      } else {
+        environment = {
+          slot: child.slot
+        };
+        if (typeof child.behavior !== "undefined") {
+          environment["behavior"] = child.behavior;
+        }
+        return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
+          _this.contextController.register(_this.parentContext, childContext, child);
+          return childContext;
+        }, function(rejectReason) {
+          return console.debug("rejectReason:::::", rejectReason);
+        });
+      }
     };
 
     ChildContextProcessor.prototype.sequenceBehavior = function(childContext) {
