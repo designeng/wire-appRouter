@@ -7,10 +7,10 @@ define [
     class TasksFactory
 
         constructor: (target, tasks) ->
-            return @provideFunctions(target, @distributeTasks(tasks))
+            @distributive = @provideFunctions(target, @prepareTasks(tasks))
+            return @
 
-
-        distributeTasks: (tasks) ->
+        prepareTasks: (tasks) ->
             filterRegExp = /filter:/g
             distributive = {}
 
@@ -31,3 +31,14 @@ define [
                 , target
             , target
             return result
+
+        runTasks: (item, callback) ->
+            noop = ->
+            callback = noop unless _.isFunction callback
+            pipeline(@distributive["filters"], item).then (result) =>
+                pipeline(@distributive["tasks"], result).then (res) =>
+                    callback()
+                , (err) ->
+                    console.error "PIPELINE TASKS ERR:::", err
+            , (reason) ->
+                console.debug "PIPELINE FILTERS ERR:::", reason

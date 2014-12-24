@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToError", "./route"], function(_, When, pipeline, navigateToError, Route) {
+define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToError", "./tasksFactory", "./route"], function(_, When, pipeline, navigateToError, TasksFactory, Route) {
   var Controller;
   return Controller = (function() {
     Controller.prototype.groupsAllowedFields = {
@@ -9,9 +9,8 @@ define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToE
     };
 
     function Controller() {
-      var routeHandlerTasks;
-      routeHandlerTasks = ["sequenceBehavior", "synchronize"];
       _.bindAll(this);
+      this.routeHandlerTasks = ["sequenceBehavior", "synchronize"];
     }
 
     Controller.prototype.getCurrentRoute = function() {

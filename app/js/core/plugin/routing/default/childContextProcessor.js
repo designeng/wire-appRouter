@@ -7,27 +7,17 @@ define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, Wh
       var tasks;
       _.bindAll(this);
       tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
-      this.distributive = new TasksFactory(this, tasks);
+      this.tasksFactory = new TasksFactory(this, tasks);
     }
 
     ChildContextProcessor.prototype.deliver = function(parentContext, bundle) {
-      var noop,
-        _this = this;
+      var _this = this;
       this.parentContext = parentContext;
-      noop = function() {};
       return _.each(bundle, function(item, index) {
         if (index > 0) {
           delete item.behavior;
         }
-        return pipeline(_this.distributive["filters"], item).then(function(result) {
-          return pipeline(_this.distributive["tasks"], result).then(function(res) {
-            return noop();
-          }, function(err) {
-            return console.error("PIPELINE TASKS ERR:::", err);
-          });
-        }, function(reason) {
-          return console.debug("PIPELINE FILTERS ERR:::", reason);
-        });
+        return _this.tasksFactory.runTasks(item);
       });
     };
 

@@ -18,13 +18,11 @@ define [
                 "sequenceBehavior"
                 "synchronize"
             ]
-            @distributive = new TasksFactory(@, tasks)
+            @tasksFactory = new TasksFactory(@, tasks)
 
         deliver: (parentContext, bundle) ->
             @parentContext = parentContext
             
-            noop = ->
-
             # if any filter return false, no tasks processing
             _.each bundle, (item, index) =>
 
@@ -32,13 +30,7 @@ define [
                     delete item.behavior
                     # delete item.route
 
-                pipeline(@distributive["filters"], item).then (result) =>
-                    pipeline(@distributive["tasks"], result).then (res) =>
-                        noop()
-                    , (err) ->
-                        console.error "PIPELINE TASKS ERR:::", err
-                , (reason) ->
-                    console.debug "PIPELINE FILTERS ERR:::", reason
+                @tasksFactory.runTasks(item)
 
         # @param {Object} child - child route object definition
         # @returns {Promise}

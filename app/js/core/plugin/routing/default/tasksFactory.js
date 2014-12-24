@@ -2,10 +2,11 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
   var TasksFactory;
   return TasksFactory = (function() {
     function TasksFactory(target, tasks) {
-      return this.provideFunctions(target, this.distributeTasks(tasks));
+      this.distributive = this.provideFunctions(target, this.prepareTasks(tasks));
+      return this;
     }
 
-    TasksFactory.prototype.distributeTasks = function(tasks) {
+    TasksFactory.prototype.prepareTasks = function(tasks) {
       var distributive, filterRegExp, _filters;
       filterRegExp = /filter:/g;
       distributive = {};
@@ -32,6 +33,24 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         }, target);
       }, target);
       return result;
+    };
+
+    TasksFactory.prototype.runTasks = function(item, callback) {
+      var noop,
+        _this = this;
+      noop = function() {};
+      if (!_.isFunction(callback)) {
+        callback = noop;
+      }
+      return pipeline(this.distributive["filters"], item).then(function(result) {
+        return pipeline(_this.distributive["tasks"], result).then(function(res) {
+          return callback();
+        }, function(err) {
+          return console.error("PIPELINE TASKS ERR:::", err);
+        });
+      }, function(reason) {
+        return console.debug("PIPELINE FILTERS ERR:::", reason);
+      });
     };
 
     return TasksFactory;

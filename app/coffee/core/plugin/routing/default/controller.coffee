@@ -3,8 +3,9 @@ define [
     "when"
     "when/pipeline"
     "core/util/navigation/navigateToError"
+    "./tasksFactory"
     "./route"
-], (_, When, pipeline, navigateToError, Route) ->
+], (_, When, pipeline, navigateToError, TasksFactory, Route) ->
 
     class Controller
 
@@ -14,11 +15,11 @@ define [
             "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
 
         constructor: ->
-            routeHandlerTasks = [
+            _.bindAll @
+            @routeHandlerTasks = [
                 "sequenceBehavior"
                 "synchronize"
             ]
-            _.bindAll @
 
         getCurrentRoute: () ->
             return @appRouterController.getCurrentRoute()
