@@ -47,8 +47,8 @@ define
         properties:
             pluginWireFn                : {$ref: 'pluginWireFn'}
 
-    controller:
-        create: "core/plugin/routing/default/controller"
+    routeHandlerFactory:
+        create: "core/plugin/routing/default/routeHandlerFactory"
         properties:
             appRouterController         : {$ref: 'appRouterController'}
             contextController           : {$ref: 'contextController'}
@@ -58,6 +58,12 @@ define
             # provided by plugin options:
             groundRoutes                : {$ref: 'groundRoutes'}
             childRoutes                 : {$ref: 'childRoutes'}
+
+    controller:
+        create: "core/plugin/routing/default/controller"
+        properties:
+            groundRoutes                : {$ref: 'groundRoutes'}
+            routeHandlerFactory         : {$ref: 'routeHandlerFactory'}
         afterFulfilling:
             "registerGroundRoutes": "hasherInitializator.initialize"
         ready:

@@ -1,8 +1,8 @@
 define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, When, sequence, pipeline) {
   var TasksFactory;
   return TasksFactory = (function() {
-    TasksFactory.prototype.noop = function() {
-      return true;
+    TasksFactory.prototype.noop = function(object) {
+      return object;
     };
 
     function TasksFactory(target, tasks) {
@@ -59,10 +59,10 @@ define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, Whe
       if (!_.isFunction(callback)) {
         callback = this.noop;
       }
-      return sequence(this.distributive["befores"]).then(function() {
-        return pipeline(_this.distributive["filters"], item).then(function(result) {
-          return pipeline(_this.distributive["tasks"], result).then(function(res) {
-            return callback();
+      return sequence(this.distributive["befores"], item).then(function() {
+        return pipeline(_this.distributive["filters"], item).then(function(result1) {
+          return pipeline(_this.distributive["tasks"], result1).then(function(result2) {
+            return callback(result2);
           }, function(err) {
             return console.error("PIPELINE TASKS ERR:::", err);
           });

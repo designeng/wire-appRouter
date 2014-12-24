@@ -7,8 +7,8 @@ define [
 
     class TasksFactory
 
-        noop: ->
-            return true
+        noop: (object) ->
+            return object
 
         constructor: (target, tasks) ->
             @distributive = @provideFunctions(target, @prepareTasks(tasks))
@@ -48,10 +48,10 @@ define [
         runTasks: (item, callback) ->
             callback = @noop unless _.isFunction callback
 
-            sequence(@distributive["befores"]).then () =>
-                pipeline(@distributive["filters"], item).then (result) =>
-                    pipeline(@distributive["tasks"], result).then (res) ->
-                        callback()
+            sequence(@distributive["befores"], item).then () =>
+                pipeline(@distributive["filters"], item).then (result1) =>
+                    pipeline(@distributive["tasks"], result1).then (result2) ->
+                        callback(result2)
                     , (err) ->
                         console.error "PIPELINE TASKS ERR:::", err
                 , (reason) ->

@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToError", "./tasksFactory", "./route"], function(_, When, pipeline, navigateToError, TasksFactory, Route) {
+define(["underscore", "when", "./route"], function(_, When, Route) {
   var Controller;
   return Controller = (function() {
     Controller.prototype.groupsAllowedFields = {
@@ -8,14 +8,7 @@ define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToE
       "child": ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
     };
 
-    function Controller() {
-      _.bindAll(this);
-      this.routeHandlerTasks = ["sequenceBehavior", "synchronize"];
-    }
-
-    Controller.prototype.getCurrentRoute = function() {
-      return this.appRouterController.getCurrentRoute();
-    };
+    function Controller() {}
 
     Controller.prototype.registerGroundRoutes = function() {
       var _this = this;
@@ -26,32 +19,11 @@ define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToE
         });
         routeHandler = (function(routeObject) {
           return function() {
-            var child;
-            child = _this.filterStrategy(_this.childRoutes, routeObject.route, _this.getCurrentRoute());
-            return When(_this.environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {
-              slot: routeObject.slot
-            })).then(function(parentContext) {
-              return _this.processChildRoute(parentContext, child);
-            }).otherwise(function(error) {
-              return navigateToError("js", error);
-            });
+            return _this.routeHandlerFactory.createHandler(routeObject);
           };
         })(routeObject);
         return new Route(routeKey, routeValue.rules, routeHandler);
       });
-    };
-
-    Controller.prototype.processChildRoute = function(context, child) {
-      var bundle, relative;
-      bundle = [];
-      bundle.push(child);
-      if (child.relative) {
-        relative = _.where(this.childRoutes, {
-          spec: child.relative
-        })[0];
-        bundle.push(relative);
-      }
-      return this.childContextProcessor.deliver(context, bundle);
     };
 
     Controller.prototype.checkForAllowedFields = function(object, routeGroupName) {

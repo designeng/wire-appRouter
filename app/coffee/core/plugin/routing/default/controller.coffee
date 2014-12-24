@@ -1,11 +1,8 @@
 define [
     "underscore"
     "when"
-    "when/pipeline"
-    "core/util/navigation/navigateToError"
-    "./tasksFactory"
     "./route"
-], (_, When, pipeline, navigateToError, TasksFactory, Route) ->
+], (_, When, Route) ->
 
     class Controller
 
@@ -15,14 +12,6 @@ define [
             "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
 
         constructor: ->
-            _.bindAll @
-            @routeHandlerTasks = [
-                "sequenceBehavior"
-                "synchronize"
-            ]
-
-        getCurrentRoute: () ->
-            return @appRouterController.getCurrentRoute()
 
         registerGroundRoutes: () ->
             _.forEach @groundRoutes, (routeValue, routeKey) =>
@@ -30,35 +19,10 @@ define [
 
                 routeHandler = do (routeObject = routeObject) =>
                     return () =>
-                        child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
-                        
-                        # registred = @contextController.getRegistredContext(child.route)
-
-                        # if registred?
-                        #     @processChildRoute(registred.parentContext, child)
-                        # else
-
-                        When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (parentContext) =>
-                            @processChildRoute(parentContext, child)
-                        .otherwise (error) ->
-                            navigateToError("js", error)
+                        @routeHandlerFactory.createHandler(routeObject)
 
                 # register route
                 new Route(routeKey, routeValue.rules, routeHandler)
-
-        # "Route" - not "routes" - in method name, because only one child
-        # should be choosed from @childRoutes by filterStrategy in routeHandler
-        # @param {WireContext} context
-        # @param {WireContext} child - object form childRoutes, choosed by filterStrategy
-        processChildRoute: (context, child) ->
-            bundle = []
-            bundle.push child
-
-            if child.relative       # TODO: and no cached relative
-                relative = _.where(@childRoutes, {spec: child.relative})[0]
-                bundle.push relative
-
-            @childContextProcessor.deliver(context, bundle)
 
         # TODO: remove if not used
         checkForAllowedFields: (object, routeGroupName) ->

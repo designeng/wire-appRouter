@@ -69,8 +69,8 @@ define({
       }
     }
   },
-  controller: {
-    create: "core/plugin/routing/default/controller",
+  routeHandlerFactory: {
+    create: "core/plugin/routing/default/routeHandlerFactory",
     properties: {
       appRouterController: {
         $ref: 'appRouterController'
@@ -92,6 +92,17 @@ define({
       },
       childRoutes: {
         $ref: 'childRoutes'
+      }
+    }
+  },
+  controller: {
+    create: "core/plugin/routing/default/controller",
+    properties: {
+      groundRoutes: {
+        $ref: 'groundRoutes'
+      },
+      routeHandlerFactory: {
+        $ref: 'routeHandlerFactory'
       }
     },
     afterFulfilling: {
