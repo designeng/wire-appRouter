@@ -1,4 +1,4 @@
-define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
+define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, When, sequence, pipeline) {
   var TasksFactory;
   return TasksFactory = (function() {
     TasksFactory.prototype.noop = function() {
@@ -44,7 +44,11 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       result = {};
       _.each(distributive, function(methods, key) {
         return result[key] = _.map(methods, function(method) {
-          return target[method];
+          if (!target[method]) {
+            throw new Error("No method with name '" + method + "' provided!");
+          } else {
+            return target[method];
+          }
         }, target);
       }, target);
       return result;
@@ -55,7 +59,7 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
       if (!_.isFunction(callback)) {
         callback = this.noop;
       }
-      return When.all(this.distributive["befores"]).then(function() {
+      return sequence(this.distributive["befores"]).then(function() {
         return pipeline(_this.distributive["filters"], item).then(function(result) {
           return pipeline(_this.distributive["tasks"], result).then(function(res) {
             return callback();

@@ -1,8 +1,9 @@
 define [
     "underscore"
     "when"
+    "when/sequence"
     "when/pipeline"
-], (_, When, pipeline) ->
+], (_, When, sequence, pipeline) ->
 
     class TasksFactory
 
@@ -36,7 +37,10 @@ define [
             result = {}
             _.each distributive, (methods, key) ->
                 result[key] = _.map methods, (method) ->
-                    target[method]
+                    if !target[method]
+                        throw new Error "No method with name '#{method}' provided!"
+                    else
+                        return target[method]
                 , target
             , target
             return result
@@ -44,7 +48,7 @@ define [
         runTasks: (item, callback) ->
             callback = @noop unless _.isFunction callback
 
-            When.all(@distributive["befores"]).then () =>
+            sequence(@distributive["befores"]).then () =>
                 pipeline(@distributive["filters"], item).then (result) =>
                     pipeline(@distributive["tasks"], result).then (res) ->
                         callback()
