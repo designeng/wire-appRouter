@@ -15,6 +15,7 @@ define [
             ]
             @tasksFactory = new TasksFactory(@, tasks)
 
+        # public method
         createHandler: (routeObject) ->
             @tasksFactory.runTasks(routeObject)
 
@@ -22,15 +23,17 @@ define [
         defineChildObject: (routeObject) ->
             @child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
 
-        getCached: ->
+        getCached: (routeObject) ->
+            deferred = When.defer()
             registred = @contextController.getRegistredContext(@child.route)
 
             if registred?
-                 @processChildRoute(registred.parentContext, @child)
-            # else
-
-            # TODO: reject for stop propagation
-            return 0
+                console.debug "registred:::", registred.parentContext
+                @processChildRoute(registred.parentContext, @child)
+                deferred.reject("Cached")
+            else
+                deferred.resolve(routeObject)
+            return deferred.promise
 
         loadNotCached: (routeObject) ->
             When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (parentContext) =>

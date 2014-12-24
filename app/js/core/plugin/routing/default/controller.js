@@ -5,11 +5,6 @@ define(["underscore", "when", "./route"], function(_, When, Route) {
   return Controller = (function() {
     function Controller() {}
 
-    Controller.prototype.groupsAllowedFields = {
-      "ground": ["spec", "mergeWith", "slot", "rules", "behavior"],
-      "child": ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
-    };
-
     Controller.prototype.registerGroundRoutes = function() {
       var _this = this;
       return _.forEach(this.groundRoutes, function(routeValue, routeKey) {
@@ -24,6 +19,11 @@ define(["underscore", "when", "./route"], function(_, When, Route) {
         })(routeObject);
         return new Route(routeKey, routeValue.rules, routeHandler);
       });
+    };
+
+    Controller.prototype.groupsAllowedFields = {
+      "ground": ["spec", "mergeWith", "slot", "rules", "behavior"],
+      "child": ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
     };
 
     Controller.prototype.checkForAllowedFields = function(object, routeGroupName) {

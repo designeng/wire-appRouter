@@ -16,13 +16,18 @@ define(["when", "core/util/navigation/navigateToError", "./tasksFactory"], funct
       return this.child = this.filterStrategy(this.childRoutes, routeObject.route, this.getCurrentRoute());
     };
 
-    RouteHandlerFactory.prototype.getCached = function() {
-      var registred;
+    RouteHandlerFactory.prototype.getCached = function(routeObject) {
+      var deferred, registred;
+      deferred = When.defer();
       registred = this.contextController.getRegistredContext(this.child.route);
       if (registred != null) {
+        console.debug("registred:::", registred.parentContext);
         this.processChildRoute(registred.parentContext, this.child);
+        deferred.reject("Cached");
+      } else {
+        deferred.resolve(routeObject);
       }
-      return 0;
+      return deferred.promise;
     };
 
     RouteHandlerFactory.prototype.loadNotCached = function(routeObject) {

@@ -3,44 +3,15 @@ define ->
         "wire/debug"
         "wire/dom"
         "core/plugin/routing/appRouterWire"
-        "core/plugin/behavior"
     ]
 
+    groundRoutes:
+        module: "specs/prospect/routes/groundRoutes"
+
     childRoutes:
-        module: "specs/prospect/child/routes"
+        module: "specs/prospect/routes/childRoutes"
 
     prospectRouter:
         appRouter:
-            groundRoutes: 
-                "{plain}"  :   
-                    spec: "specs/prospect/plain/spec"
-                    slot: {$ref: "dom.first!#prospect"}
-                    rules:
-                        plain: /^autocomplete|^calendar/i
-                    behavior: {$ref: "behavior!doSmth   "}
-
-                "{complexpart}/{infopart}"  :
-                    spec: "specs/prospect/complex/spec"
-                    slot: {$ref: "dom.first!#prospect"}
-                    rules:
-                        complexpart: /\border\b/i
-                        infopart: /\bright\b|\bcenter\b/i
-
-                "{complexpart}/{infopart}/{id}"  :
-                    spec: "specs/prospect/complex/spec"
-                    slot: {$ref: "dom.first!#prospect"}
-                    rules:
-                        complexpart: /\border\b/i
-                        infopart:/\binfo\b/i
-                        id: /[0-9]+/i
-
-                "{complexpart}/{infopart}/{id}/{side}"  :
-                    spec: "specs/prospect/complex/spec"
-                    slot: {$ref: "dom.first!#prospect"}
-                    rules:
-                        complexpart: /\border\b/i
-                        infopart:/\binfo\b/i
-                        id: /[0-9]+/i
-                        side: /\bflight\b/i
-
+            groundRoutes: {$ref: 'groundRoutes'}
             childRoutes: {$ref: 'childRoutes'}

@@ -6,12 +6,6 @@ define [
 
     class Controller
 
-        # listed all allowed fields for every context type
-        groupsAllowedFields:
-            "ground"   : ["spec", "mergeWith", "slot", "rules", "behavior"]
-            "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
-
-
         registerGroundRoutes: () ->
             _.forEach @groundRoutes, (routeValue, routeKey) =>
                 routeObject = _.extend {}, routeValue, {route: routeKey}
@@ -23,7 +17,13 @@ define [
                 # register route
                 new Route(routeKey, routeValue.rules, routeHandler)
 
-        # TODO: remove if not used
+        # --------------------- TODO: remove if not used ---------------------
+
+        # listed all allowed fields for every context type
+        groupsAllowedFields:
+            "ground"   : ["spec", "mergeWith", "slot", "rules", "behavior"]
+            "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
+
         checkForAllowedFields: (object, routeGroupName) ->
             try
                 throw new Error "The group '#{routeGroupName}' is not defined in groupsAllowedFields" unless @groupsAllowedFields.hasOwnProperty(routeGroupName)
