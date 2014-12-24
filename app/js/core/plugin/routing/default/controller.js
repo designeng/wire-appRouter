@@ -3,12 +3,12 @@ var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; 
 define(["underscore", "when", "./route"], function(_, When, Route) {
   var Controller;
   return Controller = (function() {
+    function Controller() {}
+
     Controller.prototype.groupsAllowedFields = {
       "ground": ["spec", "mergeWith", "slot", "rules", "behavior"],
       "child": ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
     };
-
-    function Controller() {}
 
     Controller.prototype.registerGroundRoutes = function() {
       var _this = this;

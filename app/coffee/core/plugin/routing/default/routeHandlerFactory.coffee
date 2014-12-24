@@ -16,13 +16,11 @@ define [
             @tasksFactory = new TasksFactory(@, tasks)
 
         createHandler: (routeObject) ->
-            console.debug "routeObject", routeObject
             @tasksFactory.runTasks(routeObject)
 
         # tasks
         defineChildObject: (routeObject) ->
             @child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
-            console.debug "defineChildObject:::", @child
 
         getCached: ->
             registred = @contextController.getRegistredContext(@child.route)
@@ -31,6 +29,7 @@ define [
                  @processChildRoute(registred.parentContext, @child)
             # else
 
+            # TODO: reject for stop propagation
             return 0
 
         loadNotCached: (routeObject) ->

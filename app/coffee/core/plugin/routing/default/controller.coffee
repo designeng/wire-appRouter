@@ -11,7 +11,6 @@ define [
             "ground"   : ["spec", "mergeWith", "slot", "rules", "behavior"]
             "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
 
-        constructor: ->
 
         registerGroundRoutes: () ->
             _.forEach @groundRoutes, (routeValue, routeKey) =>

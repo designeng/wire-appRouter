@@ -9,13 +9,11 @@ define(["when", "core/util/navigation/navigateToError", "./tasksFactory"], funct
     }
 
     RouteHandlerFactory.prototype.createHandler = function(routeObject) {
-      console.debug("routeObject", routeObject);
       return this.tasksFactory.runTasks(routeObject);
     };
 
     RouteHandlerFactory.prototype.defineChildObject = function(routeObject) {
-      this.child = this.filterStrategy(this.childRoutes, routeObject.route, this.getCurrentRoute());
-      return console.debug("defineChildObject:::", this.child);
+      return this.child = this.filterStrategy(this.childRoutes, routeObject.route, this.getCurrentRoute());
     };
 
     RouteHandlerFactory.prototype.getCached = function() {
