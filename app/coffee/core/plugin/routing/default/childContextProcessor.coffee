@@ -2,7 +2,8 @@ define [
     "underscore"
     "when"
     "when/pipeline"
-], (_, When, pipeline) ->
+    "./tasksFactory"
+], (_, When, pipeline, TasksFactory) ->
 
     class ChildContextProcessor
 
@@ -11,45 +12,28 @@ define [
 
         constructor: ->
             _.bindAll @
-
-        distributeTasks: (tasks) ->
-            filterRegExp = /filter:/g
-            distributive = {}
-
-            _filters = _.filter tasks, (item) ->
-                if item.match filterRegExp then true else false
-
-            distributive["filters"] = _.map _filters, (item) ->
-                return item.split(":")[1]
-            distributive["tasks"] = _.difference tasks, _filters
-
-            return distributive
-
-        provideFunctions: (distributive) ->
-            result = {}
-            _.each distributive, (methods, key) ->
-                result[key] = _.map methods, (method) ->
-                    @[method]
-                , @
-            , @
-            return result
-
-        deliver: (parentContext, bundle) ->
-            @parentContext = parentContext
             tasks = [
                 "filter:askForAccess"
                 "wireChildContext"
                 "sequenceBehavior"
                 "synchronize"
-                # "destroyTest"
             ]
-            distributive = @provideFunctions(@distributeTasks(tasks))
+            @distributive = new TasksFactory(@, tasks)
+
+        deliver: (parentContext, bundle) ->
+            @parentContext = parentContext
+            
             noop = ->
 
             # if any filter return false, no tasks processing
-            _.each bundle, (item, index) ->
-                pipeline(distributive["filters"], item).then (result) =>
-                    pipeline(distributive["tasks"], result).then (res) =>
+            _.each bundle, (item, index) =>
+
+                if index > 0
+                    delete item.behavior
+                    # delete item.route
+
+                pipeline(@distributive["filters"], item).then (result) =>
+                    pipeline(@distributive["tasks"], result).then (res) =>
                         noop()
                     , (err) ->
                         console.error "PIPELINE TASKS ERR:::", err
@@ -59,7 +43,11 @@ define [
         # @param {Object} child - child route object definition
         # @returns {Promise}
         askForAccess: (child) ->
-            return @accessPolicyProcessor.askForAccess(child)
+            registred = @contextController.getRegistredContext(child.route)
+            if registred?
+                return child
+            else
+                return @accessPolicyProcessor.askForAccess(child)
 
         wireChildContext: (child) ->
             registred = @contextController.getRegistredContext(child.route)
@@ -74,14 +62,15 @@ define [
                 if typeof child.behavior != "undefined"
                     environment["behavior"] = child.behavior
 
-                return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then (childContext) =>
+                return When(@environment.loadInEnvironment(child.spec, child.mergeWith, environment, @parentContext)).then (childContext) =>
                     # register context
                     @contextController.register @parentContext, childContext, child
                     return childContext
                 , (rejectReason) ->
-                    console.debug "rejectReason:::::", rejectReason
+                    console.debug "ChildContextProcessor::wireChildContext:rejectReason:", rejectReason
 
         sequenceBehavior: (childContext) ->
+            console.debug "sequenceBehavior", childContext
             if childContext.behavior?
                 return @behaviorProcessor.sequenceBehavior(childContext)
             else

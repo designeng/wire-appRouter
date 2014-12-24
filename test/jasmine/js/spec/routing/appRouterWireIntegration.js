@@ -148,12 +148,11 @@ define(["wire", "when", "hasher"], function(wire, When, hasher) {
     });
     return it("process groundRoutes (filterStrategy, contextController.setChildRoute) integration", function(done) {
       var _this = this;
-      return When(this.ctx.controller.root.controller.registerGroundRoutes()).then(function() {
+      return When().then(function() {
         return setHash("order/info/123");
       }).delay(100).then(function() {
         var childContext;
         childContext = _this.ctx.controller.root.contextController.getRegistredContext("order/info/{cpid}").childContext;
-        console.debug("childContext:::", childContext);
         expect(childContext.behavior).toBeArray();
         expect(childContext.behavior[0]).toBeFunction();
         return done();

@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "when", "core/util/navigation/navigateToError", "./route"], function(_, When, navigateToError, Route) {
+define(["underscore", "when", "when/pipeline", "core/util/navigation/navigateToError", "./route"], function(_, When, pipeline, navigateToError, Route) {
   var Controller;
   return Controller = (function() {
     Controller.prototype.groupsAllowedFields = {
@@ -9,6 +9,8 @@ define(["underscore", "when", "core/util/navigation/navigateToError", "./route"]
     };
 
     function Controller() {
+      var routeHandlerTasks;
+      routeHandlerTasks = ["sequenceBehavior", "synchronize"];
       _.bindAll(this);
     }
 
@@ -17,36 +19,27 @@ define(["underscore", "when", "core/util/navigation/navigateToError", "./route"]
     };
 
     Controller.prototype.registerGroundRoutes = function() {
-      var deferred, i, size,
-        _this = this;
-      deferred = When.defer();
-      i = 0;
-      size = _.size(this.groundRoutes);
-      _.forEach(this.groundRoutes, function(routeValue, routeKey) {
+      var _this = this;
+      return _.forEach(this.groundRoutes, function(routeValue, routeKey) {
         var routeHandler, routeObject;
-        i++;
         routeObject = _.extend({}, routeValue, {
           route: routeKey
         });
         routeHandler = (function(routeObject) {
           return function() {
+            var child;
+            child = _this.filterStrategy(_this.childRoutes, routeObject.route, _this.getCurrentRoute());
             return When(_this.environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {
               slot: routeObject.slot
-            })).then(function(context) {
-              var child;
-              child = _this.filterStrategy(_this.childRoutes, routeObject.route, _this.getCurrentRoute());
-              return _this.processChildRoute(context, child);
+            })).then(function(parentContext) {
+              return _this.processChildRoute(parentContext, child);
             }).otherwise(function(error) {
               return navigateToError("js", error);
             });
           };
         })(routeObject);
-        new Route(routeKey, routeValue.rules, routeHandler);
-        if (i === size) {
-          return deferred.resolve();
-        }
+        return new Route(routeKey, routeValue.rules, routeHandler);
       });
-      return deferred.promise;
     };
 
     Controller.prototype.processChildRoute = function(context, child) {

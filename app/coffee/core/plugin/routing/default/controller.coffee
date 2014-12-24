@@ -1,9 +1,10 @@
 define [
     "underscore"
     "when"
+    "when/pipeline"
     "core/util/navigation/navigateToError"
     "./route"
-], (_, When, navigateToError, Route) ->
+], (_, When, pipeline, navigateToError, Route) ->
 
     class Controller
 
@@ -13,33 +14,36 @@ define [
             "child"    : ["spec", "slot", "behavior", "relative", "noCache", "replaceable"]
 
         constructor: ->
+            routeHandlerTasks = [
+                "sequenceBehavior"
+                "synchronize"
+            ]
             _.bindAll @
 
         getCurrentRoute: () ->
             return @appRouterController.getCurrentRoute()
 
         registerGroundRoutes: () ->
-            deferred = When.defer()
-            i = 0
-            size = _.size @groundRoutes
             _.forEach @groundRoutes, (routeValue, routeKey) =>
-                i++
-
                 routeObject = _.extend {}, routeValue, {route: routeKey}
 
                 routeHandler = do (routeObject = routeObject) =>
                     return () =>
-                        When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (context) =>
-                            child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
-                            @processChildRoute(context, child)
+                        child = @filterStrategy(@childRoutes, routeObject.route, @getCurrentRoute())
+                        
+                        # registred = @contextController.getRegistredContext(child.route)
+
+                        # if registred?
+                        #     @processChildRoute(registred.parentContext, child)
+                        # else
+
+                        When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, {slot: routeObject.slot})).then (parentContext) =>
+                            @processChildRoute(parentContext, child)
                         .otherwise (error) ->
                             navigateToError("js", error)
 
                 # register route
                 new Route(routeKey, routeValue.rules, routeHandler)
-                if i == size
-                    deferred.resolve()
-            return deferred.promise
 
         # "Route" - not "routes" - in method name, because only one child
         # should be choosed from @childRoutes by filterStrategy in routeHandler
@@ -55,6 +59,7 @@ define [
 
             @childContextProcessor.deliver(context, bundle)
 
+        # TODO: remove if not used
         checkForAllowedFields: (object, routeGroupName) ->
             try
                 throw new Error "The group '#{routeGroupName}' is not defined in groupsAllowedFields" unless @groupsAllowedFields.hasOwnProperty(routeGroupName)

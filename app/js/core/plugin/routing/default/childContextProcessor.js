@@ -1,51 +1,26 @@
-define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
+define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, When, pipeline, TasksFactory) {
   var ChildContextProcessor;
   return ChildContextProcessor = (function() {
     ChildContextProcessor.prototype.parentContext = void 0;
 
     function ChildContextProcessor() {
+      var tasks;
       _.bindAll(this);
+      tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
+      this.distributive = new TasksFactory(this, tasks);
     }
 
-    ChildContextProcessor.prototype.distributeTasks = function(tasks) {
-      var distributive, filterRegExp, _filters;
-      filterRegExp = /filter:/g;
-      distributive = {};
-      _filters = _.filter(tasks, function(item) {
-        if (item.match(filterRegExp)) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      distributive["filters"] = _.map(_filters, function(item) {
-        return item.split(":")[1];
-      });
-      distributive["tasks"] = _.difference(tasks, _filters);
-      return distributive;
-    };
-
-    ChildContextProcessor.prototype.provideFunctions = function(distributive) {
-      var result;
-      result = {};
-      _.each(distributive, function(methods, key) {
-        return result[key] = _.map(methods, function(method) {
-          return this[method];
-        }, this);
-      }, this);
-      return result;
-    };
-
     ChildContextProcessor.prototype.deliver = function(parentContext, bundle) {
-      var distributive, noop, tasks;
+      var noop,
+        _this = this;
       this.parentContext = parentContext;
-      tasks = ["filter:askForAccess", "wireChildContext", "sequenceBehavior", "synchronize"];
-      distributive = this.provideFunctions(this.distributeTasks(tasks));
       noop = function() {};
       return _.each(bundle, function(item, index) {
-        var _this = this;
-        return pipeline(distributive["filters"], item).then(function(result) {
-          return pipeline(distributive["tasks"], result).then(function(res) {
+        if (index > 0) {
+          delete item.behavior;
+        }
+        return pipeline(_this.distributive["filters"], item).then(function(result) {
+          return pipeline(_this.distributive["tasks"], result).then(function(res) {
             return noop();
           }, function(err) {
             return console.error("PIPELINE TASKS ERR:::", err);
@@ -57,7 +32,13 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
     };
 
     ChildContextProcessor.prototype.askForAccess = function(child) {
-      return this.accessPolicyProcessor.askForAccess(child);
+      var registred;
+      registred = this.contextController.getRegistredContext(child.route);
+      if (registred != null) {
+        return child;
+      } else {
+        return this.accessPolicyProcessor.askForAccess(child);
+      }
     };
 
     ChildContextProcessor.prototype.wireChildContext = function(child) {
@@ -74,16 +55,17 @@ define(["underscore", "when", "when/pipeline"], function(_, When, pipeline) {
         if (typeof child.behavior !== "undefined") {
           environment["behavior"] = child.behavior;
         }
-        return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment)).then(function(childContext) {
+        return When(this.environment.loadInEnvironment(child.spec, child.mergeWith, environment, this.parentContext)).then(function(childContext) {
           _this.contextController.register(_this.parentContext, childContext, child);
           return childContext;
         }, function(rejectReason) {
-          return console.debug("rejectReason:::::", rejectReason);
+          return console.debug("ChildContextProcessor::wireChildContext:rejectReason:", rejectReason);
         });
       }
     };
 
     ChildContextProcessor.prototype.sequenceBehavior = function(childContext) {
+      console.debug("sequenceBehavior", childContext);
       if (childContext.behavior != null) {
         return this.behaviorProcessor.sequenceBehavior(childContext);
       } else {

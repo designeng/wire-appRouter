@@ -41,15 +41,22 @@ define(["underscore", "when", "core/util/navigation/navigateToError"], function(
       return object;
     };
 
-    Environment.prototype.loadInEnvironment = function(specId, mergeWith, environment) {
-      var promisedModules,
+    Environment.prototype.loadInEnvironment = function(specId, mergeWith, environment, parentContext) {
+      var next, promisedModules,
         _this = this;
       promisedModules = this.getMergedModulesArrayOfPromises(specId, mergeWith);
+      next = function(context) {
+        return context;
+      };
       return When.all(promisedModules).then(function(modulesResult) {
         modulesResult[0] = _this.applyEnvironment(modulesResult[0], environment);
-        return _this.pluginWireFn.createChild(modulesResult).then(function(context) {
-          return context;
-        });
+        if (!parentContext) {
+          return _this.pluginWireFn.createChild(modulesResult).then(next);
+        } else {
+          return parentContext.wire(modulesResult).then(next);
+        }
+      }, function(reason) {
+        return console.debug("Environment::loadInEnvironment reject reason:", reason);
       });
     };
 

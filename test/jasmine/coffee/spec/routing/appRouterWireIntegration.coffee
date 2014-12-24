@@ -132,12 +132,10 @@ define [
                 console.log "ERROR", err
 
         it "process groundRoutes (filterStrategy, contextController.setChildRoute) integration", (done) ->
-            When(@ctx.controller.root.controller.registerGroundRoutes()).then () =>
+            When().then () =>
                 setHash "order/info/123"
             .delay(100).then () =>
-                # expect(@ctx.controller.root.contextController.getChildRoute()).toBe "order/info/{cpid}"
                 childContext = @ctx.controller.root.contextController.getRegistredContext("order/info/{cpid}").childContext
-                console.debug "childContext:::", childContext
                 expect(childContext.behavior).toBeArray()
                 expect(childContext.behavior[0]).toBeFunction()
                 done()
