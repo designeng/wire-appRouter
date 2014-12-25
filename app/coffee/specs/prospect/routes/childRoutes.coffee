@@ -4,8 +4,14 @@ define ->
 
         "autocomplete"  :   
             spec: "components/autocomplete/spec"
-            slot: {$ref: "dom.first!#page"}
+            slot: {$ref: "dom.first!#pageCenter"}
             behavior: {$ref: "behavior!autocompleteFn"}
+
+        "autocomplete/{id}"  :   
+            spec: "components/calendar/spec"
+            slot: {$ref: "dom.first!#pageRight"}
+            behavior: {$ref: "behavior!calendarFn"}
+            relative: "components/autocomplete/spec"
 
         "calendar"  :  
             spec: "components/calendar/spec"

@@ -1,18 +1,18 @@
 define ->
     groundRoutes = 
-        "{plain}"  :   
-            spec: "specs/prospect/plain/spec"
-            slot: {$ref: "dom.first!#prospect"}
-            rules:
-                plain: /^autocomplete|^calendar/i
-            behavior: {$ref: "behavior!doSmth   "}
-
-        "{complexpart}/{infopart}"  :
+        "{base}"  :   
             spec: "specs/prospect/complex/spec"
             slot: {$ref: "dom.first!#prospect"}
             rules:
-                complexpart: /\border\b/i
-                infopart: /\bright\b|\bcenter\b/i
+                base: /^autocomplete|^calendar/i
+            behavior: {$ref: "behavior!doSmth   "}
+
+        "{base}/{infopart}"  :
+            spec: "specs/prospect/complex/spec"
+            slot: {$ref: "dom.first!#prospect"}
+            rules:
+                base: /\border\b|\bautocomplete\b/i
+                infopart: /\bright\b|\bcenter\b|[0-9]+/i
 
         "{complexpart}/{infopart}/{id}"  :
             spec: "specs/prospect/complex/spec"

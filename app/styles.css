@@ -1,0 +1,17 @@
+.complex{
+    width: 600px;
+    height: 400px;
+}
+
+.complex__center{
+    float: left;
+    background: #FFA500;
+    width: 50%;
+    height: 100%;
+}
+.complex__right{
+    float: right;
+    background: #008080;
+    width: 50%;
+    height: 100%;
+}
