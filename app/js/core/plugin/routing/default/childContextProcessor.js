@@ -23,7 +23,7 @@ define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, Wh
 
     ChildContextProcessor.prototype.askForAccess = function(child) {
       var registred;
-      registred = this.contextController.getRegistredContext(child.route);
+      registred = this.contextController.getRegistredContext(child.route, "child");
       if (registred != null) {
         return child;
       } else {
@@ -32,11 +32,10 @@ define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, Wh
     };
 
     ChildContextProcessor.prototype.wireChildContext = function(child) {
-      var childContext, environment, registred,
+      var childContext, environment, _ref,
         _this = this;
-      registred = this.contextController.getRegistredContext(child.route);
-      if (registred != null) {
-        childContext = registred.childContext;
+      childContext = (_ref = this.contextController.getRegistredContext(child.route, "child")) != null ? _ref.childContext : void 0;
+      if (childContext != null) {
         return childContext;
       } else {
         environment = {
@@ -67,12 +66,6 @@ define(["underscore", "when", "when/pipeline", "./tasksFactory"], function(_, Wh
         childContext.synchronizeWithRoute.call(childContext);
       }
       return childContext;
-    };
-
-    ChildContextProcessor.prototype.destroyTest = function(childContext) {
-      return setTimeout(function() {
-        return childContext.destroy();
-      }, 1000);
     };
 
     return ChildContextProcessor;

@@ -71,5 +71,4 @@ define [
                     console.debug "PIPELINE FILTERS ERR:::", reason
 
             When(deferred.promise).then (resultContext) =>
-                console.debug "res::::", resultContext
                 sequence(@distributive["afters"], resultContext)

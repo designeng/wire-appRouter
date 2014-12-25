@@ -26,20 +26,21 @@ define [
 
         getCached: (routeObject) ->
             deferred = When.defer()
-            registred = @contextController.getRegistredContext(@child.route)
+            parentContext = @contextController.getRegistredContext(@child.route, "parent")?.parentContext
 
-            if registred?
-                console.debug "registred:::", registred.parentContext
-                @processChildRoute(registred.parentContext, @child)
+            if parentContext?
+                console.debug "registred----------------------------", parentContext
+                @processChildRoute(parentContext, @child)
                 deferred.reject("Cached")
             else
                 deferred.resolve(routeObject)
             return deferred.promise
 
         loadNotCached: (routeObject) ->
+            console.debug "loadNotCached--------------------------", @contextController.getContextHash()
             env = {slot: routeObject.slot, behavior: routeObject.behavior}
             When(@environment.loadInEnvironment(routeObject.spec, routeObject.mergeWith, env)).then (parentContext) =>
-                @processChildRoute(parentContext, @child)
+                @processChildRoute(parentContext)
                 return parentContext
             .otherwise (error) ->
                 navigateToError("js", error)
@@ -48,12 +49,13 @@ define [
         # should be choosed from @childRoutes by filterStrategy in routeHandler
         # @param {WireContext} context
         # @param {WireContext} child - object form childRoutes, choosed by filterStrategy
-        processChildRoute: (context, child) ->
+        processChildRoute: (context) ->
+            console.debug "processChildRoute:::::>>>>>", context
             bundle = []
-            bundle.push child
+            bundle.push @child
 
-            if child.relative       # TODO: and no cached relative
-                relative = _.where(@childRoutes, {spec: child.relative})[0]
+            if @child.relative       # TODO: and no cached relative
+                relative = _.where(@childRoutes, {spec: @child.relative})[0]
                 bundle.push relative
 
             @childContextProcessor.deliver(context, bundle)

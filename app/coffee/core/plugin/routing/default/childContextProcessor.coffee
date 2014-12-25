@@ -35,17 +35,16 @@ define [
         # @param {Object} child - child route object definition
         # @returns {Promise}
         askForAccess: (child) ->
-            registred = @contextController.getRegistredContext(child.route)
+            registred = @contextController.getRegistredContext(child.route, "child")
             if registred?
                 return child
             else
                 return @accessPolicyProcessor.askForAccess(child)
 
         wireChildContext: (child) ->
-            registred = @contextController.getRegistredContext(child.route)
+            childContext = @contextController.getRegistredContext(child.route, "child")?.childContext
 
-            if registred?
-                childContext = registred.childContext
+            if childContext?
                 return childContext
             else
                 environment = 
@@ -71,8 +70,3 @@ define [
             if typeof childContext.synchronizeWithRoute != "undefined"
                 childContext.synchronizeWithRoute.call childContext
             return childContext
-
-        destroyTest: (childContext) ->
-            setTimeout () ->
-                childContext.destroy() 
-            , 1000

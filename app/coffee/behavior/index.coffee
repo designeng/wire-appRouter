@@ -9,16 +9,16 @@ define [
         shiftRight          : shift.shiftRight
 
         sendMessage         : (str) ->
-            console.debug "MESSAGE:::"
+            # console.debug "MESSAGE:::"
 
         doSmth              : () ->
-            console.debug "DO SOMETHING!!!!!!!!!!!!!!!!!!!!"
+            # console.debug "DO SOMETHING!!!!!!!!!!!!!!!!!!!!"
 
         autocompleteFn      : () ->
-            console.debug "autocompleteFn"
+            # console.debug "autocompleteFn"
 
         calendarFn          : () ->
-            console.debug "calendarFn"
+            # console.debug "calendarFn"
     }
 
     return index

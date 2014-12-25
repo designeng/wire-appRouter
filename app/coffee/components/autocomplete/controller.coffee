@@ -18,7 +18,7 @@ define ->
             # , 1000)
 
         synchronizeWithRoute: ->
-            console.debug "synchronizeWithRoute aitocomplete"
+            # console.debug "synchronizeWithRoute aitocomplete"
             
 
         onItemClick: (item) ->

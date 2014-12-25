@@ -29,8 +29,18 @@ define(["underscore", "when", "./RouteObserver"], function(_, When, RouteObserve
       };
     };
 
-    ContextController.prototype.getRegistredContext = function(route) {
-      return this._contextHash[route];
+    ContextController.prototype.getRegistredContext = function(route, type) {
+      var fragments;
+      if (type === "parent") {
+        fragments = route.split("/");
+        if (fragments.length > 1) {
+          return this._contextHash[_.initial(fragments).join("/")];
+        } else {
+          return this._contextHash[route];
+        }
+      } else {
+        return this._contextHash[route];
+      }
     };
 
     ContextController.prototype.ensureContext = function(context) {

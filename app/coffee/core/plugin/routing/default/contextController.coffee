@@ -34,8 +34,15 @@ define [
                 child
             }
 
-        getRegistredContext: (route) ->
-            return @_contextHash[route]
+        getRegistredContext: (route, type) ->
+            if type is "parent"
+                fragments = route.split("/")
+                if fragments.length > 1
+                    return @_contextHash[_.initial(fragments).join("/")]
+                else
+                    return @_contextHash[route]
+            else
+                return @_contextHash[route]
 
         # TODO: remove if not used 
         # context duck-typing

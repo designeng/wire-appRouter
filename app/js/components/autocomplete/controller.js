@@ -11,9 +11,7 @@ define(function() {
 
     AutoCompleteController.prototype.onReady = function() {};
 
-    AutoCompleteController.prototype.synchronizeWithRoute = function() {
-      return console.debug("synchronizeWithRoute aitocomplete");
-    };
+    AutoCompleteController.prototype.synchronizeWithRoute = function() {};
 
     AutoCompleteController.prototype.onItemClick = function(item) {
       return console.log("____click");

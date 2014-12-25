@@ -86,7 +86,6 @@ define(["underscore", "when", "when/sequence", "when/pipeline"], function(_, Whe
         });
       });
       return When(deferred.promise).then(function(resultContext) {
-        console.debug("res::::", resultContext);
         return sequence(_this.distributive["afters"], resultContext);
       });
     };
